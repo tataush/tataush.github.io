@@ -226,11 +226,12 @@ img.avatar:hover {
 
 #portfolio {
 	position: relative;
-	background: url(../img/bg.jpg);
+	background: #ebebeb;
+/*	background: url(../img/bg.jpg);
 	-webkit-background-size: cover;
     -moz-background-size: cover;
     background-size: cover;
-    background-attachment: fixed;
+    background-attachment: fixed;*/
 }
 
 .and div {
@@ -273,6 +274,18 @@ img.avatar:hover {
 
 .project-content img {
 	width: 100%;
+	-webkit-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	transition: all 0.2s;
+    -webkit-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+}
+
+.project-content img:hover {
+	-webkit-filter: grayscale(0%);
+	-o-filter: grayscale(0%);
+    filter: grayscale(0%);
 }
 @media screen and (max-width: 700px) {
 	.center-box h1 {
