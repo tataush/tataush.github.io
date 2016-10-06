@@ -145,7 +145,7 @@ button.drop-down:active {
 
 
 .search-bar {
-    width: 600px;
+    width: 585px;
     float: left;
 }
 
@@ -174,13 +174,14 @@ button.drop-down:active {
     font-size: 15px;
     color: #fff;
     font-weight: bold;
-    padding: 10px 13px;
+    padding: 11px 13px;
     letter-spacing: 1px;
     margin-left: 9px;
     background-color: #3b4d6b;
     border: 1px solid #3b4d6b;
     border-radius: 3px;
     cursor: pointer;
+    float: right;
 }
 
 .search-bar form button.btn-search:hover {
