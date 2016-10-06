@@ -10,13 +10,23 @@ body {
     /*background: url(../home.png);*/
     background-position: top center;
     background-repeat: no-repeat;
+    font-family:  Arial, Verdana;
 }
 
+button:focus,
+button:active,
+input:focus {
+    outline: none;
+}
+
+header {
+    /*opacity: 0.7;*/
+}
 .top-header {
     height: 63px;
     background: #f5f7ed;
     border-bottom: 1px solid #e5e7de;
-    /*opacity: 0.7;*/
+    opacity: 0.7;
 }
 
 .container {
@@ -73,10 +83,116 @@ body {
     width: 200px;
     height: 68px;
     background-image: url(../img/new-deals-bg.png);
+    background-repeat: no-repeat;
     background-position: center bottom;
     float: right;
     margin-bottom: -5px;
 }
+
+.all-new-deals .all-new-deals-content {
+    padding-left: 80px;
+    padding-top: 8px;
+    text-transform: uppercase;
+    background-image: url(../img/price_tag.png);
+    background-repeat: no-repeat;
+    background-position: 34px 4px;
+}
+
+.all-new-deals .all-new-deals-content p {
+    color: #3c4e6c;
+    font-size: 15px;
+}
+
+.all-new-deals .all-new-deals-content p span {
+    font-weight: bold;
+    font-size: 25px;
+    line-height: 1;
+    margin-left: -2px;
+}
+
+.sub-header {
+    background-color: #f0f2eb;
+    border-bottom: 1px solid #e5e7de;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    height: 42px;
+}
+
+.drop-down-nav {
+    width: 200px;
+    float: left;
+}
+
+
+button.drop-down {
+    min-width: 120px;
+    padding: 11px 25px 11px 9px;
+    text-align: left;
+    font-size: 15px;
+    color: #3b4d6b;
+    font-weight: bold;
+    background-color: #fff;
+    border: 1px solid #bcbcbc;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button.drop-down:focus,
+button.drop-down:active {
+    outline: none;
+    border-color: #3b4d6b;
+}
+
+
+.search-bar {
+    width: 600px;
+    float: left;
+}
+
+
+.search-bar:after {
+    content: '';
+    display: table;
+    clear: both;
+}
+
+.search-bar form input.search-input {
+    width: 425px;
+    background-color: #fff;
+    border: 1px solid #bcbcbc;
+    padding: 11px 5px 11px 45px;
+    margin-left: 12px;
+    border-radius: 3px;
+}
+
+.search-bar form input.search-input:focus {
+    border-color: #3b4d6b;
+}
+
+
+.search-bar form button.btn-search {
+    font-size: 15px;
+    color: #fff;
+    font-weight: bold;
+    padding: 10px 13px;
+    letter-spacing: 1px;
+    margin-left: 9px;
+    background-color: #3b4d6b;
+    border: 1px solid #3b4d6b;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.search-bar form button.btn-search:hover {
+    color: #3b4d6b;
+    background: #fff;
+}
+
+.actions-bar {
+    width: 200px;
+    float: right;
+}
+
 
 footer {
     position: absolute;
