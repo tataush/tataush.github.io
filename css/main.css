@@ -1,4 +1,9 @@
-﻿* {
+﻿@font-face {
+    font-family: univers;
+    src: url(../fonts/univers.otf);
+}
+
+* {
     margin: 0;
     padding: 0;
 }
@@ -23,7 +28,6 @@ input:focus {
     height: 63px;
     background: #f5f7ed;
     border-bottom: 1px solid #e5e7de;
-    opacity: 0.7;
 }
 
 .container {
@@ -272,6 +276,50 @@ button.drop-down:active {
     /*opacity: 0.7;*/
 }
 
+.slider {
+    width: 1000px;
+    height: 360px;
+    margin: 0 auto;
+    padding: 5px 0;
+}
+
+.slider .slider-item {
+    height: 290px;
+}
+
+.slide-content.first-slide {
+    text-align: center;
+    width: 835px;
+    padding-top: 75px;
+    font-family: univers;
+    color: #3b4d6b;
+}
+
+.slide-content.first-slide h2 {
+    text-transform: uppercase;
+    font-size: 50px;
+   
+}
+
+.slide-content.first-slide span {
+    font-size: 35px;
+    line-height: 1;
+    letter-spacing: 4px;
+    font-weight: bold;
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
+.slide-content.first-slide a {
+    margin-top: 20px;
+    font-size: 20px;
+    letter-spacing: 1px;
+    color: #3b4d6b;
+    letter-spacing: 4px;
+    display: inline-block;
+    text-decoration: none;
+}
+
 .main {
     width: 1000px;
     margin: 0 auto;
@@ -279,6 +327,26 @@ button.drop-down:active {
     min-height: 800px;
     margin-top: -100px;
     z-index: 1;
+}
+
+.owl-pagination {
+    display: inline-block;
+    margin: 0 auto;
+    background: rgba(60, 78, 108, 0.6);
+    padding: 3px 5px 0 5px;
+    border-radius: 3px; 
+}
+
+.owl-theme .owl-controls .owl-page span {
+    background: #fff;
+}
+
+.owl-theme .owl-controls .owl-buttons div {
+    background: rgba(60, 78, 108, 0.6);
+    opacity: 0.9;
+    font-size: 12px;
+    padding: 5px 10px;
+    border-radius: 3px;
 }
 
 footer {

@@ -4,8 +4,13 @@
 	<meta charset="UTF-8">
 	<title>Shoptics</title>
 	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/owl.carousel.css">
+	<link rel="stylesheet" href="css/owl.theme.css">
 	<link rel="stylesheet" href="css/main.css">
+
 	<script src="js/jquery.min.js"></script>
+	<script src="js/owl.carousel.min.js"></script>
+
 	<!--[if lt IE 9]>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.min.js"></script>
 		<link rel="stylesheet" href="css/ie.css">
@@ -68,7 +73,52 @@
 				</div>
 			</div>
 		</header>
-		<div class="main-slider"></div>
+		<div class="main-slider">
+			<div class="slider">
+				<div class="owl-carousel">
+					<div class="slider-item">
+						<div class="slide-content first-slide">
+							<h2>Get the best</h2>
+							<span>in</span>
+							<h2>performance sunglasses</h2>
+							<a href="#">show now</a>
+						</div>
+					</div>
+					<div class="slider-item">
+						<div class="slide-content first-slide">
+							<h2>Get the best</h2>
+							<span>in</span>
+							<h2>performance sunglasses</h2>
+							<a href="#">show now</a>
+						</div>
+					</div>
+					<div class="slider-item">
+						<div class="slide-content first-slide">
+							<h2>Get the best</h2>
+							<span>in</span>
+							<h2>performance sunglasses</h2>
+							<a href="#">show now</a>
+						</div>
+					</div>
+					<div class="slider-item">
+						<div class="slide-content first-slide">
+							<h2>Get the best</h2>
+							<span>in</span>
+							<h2>performance sunglasses</h2>
+							<a href="#">show now</a>
+						</div>
+					</div>
+					<div class="slider-item">
+						<div class="slide-content first-slide">
+							<h2>Get the best</h2>
+							<span>in</span>
+							<h2>performance sunglasses</h2>
+							<a href="#">show now</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="main">
 			<div class="sidebar"></div>
 			<div class="content"></div>
@@ -76,5 +126,18 @@
 		<footer>
 			
 		</footer>
+	<script>
+		$(function(){
+			$(document).ready(function() {
+		  		$(".owl-carousel").owlCarousel({
+		  			navigation : true,
+					slideSpeed : 600,
+					paginationSpeed : 600,
+					singleItem:true,
+					  navigationText : ["&#9668;","&#9658;"],
+		  		});
+			});
+		});
+	</script>
 </body>
 </html>
