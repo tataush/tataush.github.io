@@ -10,6 +10,7 @@
 html,
 body {
     height: 100%;
+    /*opacity: 0.5;*/
 }
 body {
     background: url(../home.png);
@@ -232,6 +233,10 @@ button.drop-down:active {
     display: block;
 }
 
+.actions-bar ul li a:hover {
+    text-decoration: underline;
+}
+
 .actions-bar ul li a i.icon {
     display: inline-block;
     width: 40px;
@@ -273,7 +278,6 @@ button.drop-down:active {
     background: url(../img/slider-bg.jpg);
     background-repeat: no-repeat;
     background-position: top center;
-    /*opacity: 0.7;*/
 }
 
 .slider {
@@ -372,7 +376,6 @@ button.drop-down:active {
     background: #fff;
     margin-top: -90px;
     z-index: 1;
-    /*opacity: 0.7;*/
 }
 
 .main:after {
@@ -386,7 +389,7 @@ button.drop-down:active {
     width: 200px;
     float: left;
     min-height: 400px;
-    padding-top: 40px;
+    padding-top: 32px;
 }
 
 .content {
@@ -533,8 +536,98 @@ button.drop-down:active {
 }
 
 footer {
-    margin-top: 60px;
+    margin-top: 100px;
     width: 100%;
-    height: 80px;
     background: #cfcfcf;
+}
+
+.top-footer-block {
+    background: #3b4d6b;
+    padding: 50px 0 58px 0;
+}
+
+.top-footer-block .subscribe {
+    width: 400px;
+    float: left;
+}
+
+.top-footer-block .subscribe form {
+    margin-top: -5px;
+}
+
+
+.top-footer-block .subscribe input {
+    width: 253px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #fff;
+    float: left;
+}
+
+.top-footer-block .subscribe button {
+    padding: 10px 20px;
+    border-radius: 3px;
+    margin-left: 10px;
+    color: #fff;
+    background: #71b905;
+    border: 1px solid #71b905;
+    cursor: pointer;
+}
+
+.top-footer-block .subscribe button:hover {
+    border: 1px solid #fff;
+    color:  #71b905;
+    background: #fff;
+}
+
+.top-footer-block .info {
+    width: 200px;
+    float: left;
+}
+
+.top-footer-block h4 {
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 12px;
+}
+
+.top-footer-block ul li {
+    list-style: none;
+    font-size: 12px;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.top-footer-block ul li a {
+    text-decoration: none;
+    color: #fff;
+}
+
+.top-footer-block .info.time {
+    text-align: right;
+}
+
+.top-footer-block .info.contacts {
+    width: 190px;
+    padding-left: 10px;
+}
+
+.top-footer-block .info.contacts ul li span {
+    font-weight: bold;
+}
+
+.top-footer-block .info.learn {
+    width: 142px;
+    padding-left: 58px;
+}
+
+.copyright {
+    background: #1b2f51;
+    padding: 30px 0;
+}
+
+.copyright p {
+    font-size: 12px;
+    color: #fff;
 }
