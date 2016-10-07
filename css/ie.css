@@ -1,3 +1,8 @@
 ﻿.shop-items .item a:hover {
 	background: #fcfcfc;
 }
+
+.owl-pagination {
+	background:  #3b4d6b;
+	opacity: 0.8;
+}
