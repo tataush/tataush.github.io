@@ -10,10 +10,10 @@
 html,
 body {
     height: 100%;
-    /*opacity: 0.5;*/
+    /*opacity: 0.8;*/
 }
 body {
-    background: url(../home.png);
+    background: url(../home1.png);
     background-position: top center;
     background-repeat: no-repeat;
     font-family:  Arial, Verdana;
@@ -77,9 +77,26 @@ input:focus {
     line-height: 35px;
     text-decoration: none;
     padding-right: 10px; 
-    font-family: Arial;
+    vertical-align: middle;
+    padding-left: 5px;
+    position: relative;
 }
 
+.banner a.learn-more:after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-image: url(../img/arrows.png);
+    background-position: 1px -5px; 
+    position: absolute;
+    top: 3px;
+    right: 0;
+}
+
+.banner a.learn-more:hover {
+    text-decoration: underline;
+}
 
 .all-new-deals {
     width: 200px;
@@ -123,6 +140,29 @@ input:focus {
 .drop-down-nav {
     width: 200px;
     float: left;
+    position: relative;
+}
+
+.drop-down-nav .pop-up-nav {
+    position: absolute; 
+    top: 57px;
+    width: 180px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #bcbcbc;
+    z-index: 9;
+}
+
+.drop-down-nav .pop-up-nav:after {
+    content: '';
+    display: block;
+    width: 20px;
+    height: 11px;
+    position: absolute;
+    top: -11px;
+    left: 50%;
+    margin-left: -10px;
+    background: url(../img/pop-up-arrow.png);
 }
 
 
@@ -137,6 +177,19 @@ button.drop-down {
     border: 1px solid #bcbcbc;
     border-radius: 3px;
     cursor: pointer;
+    position: relative;
+}
+
+button.drop-down:after {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    background-image: url(../img/arrows.png);
+    background-position: 17px -5px;
+    position: absolute;
+    top: 15px;
+    right: 12px;
 }
 
 button.drop-down:focus,
@@ -165,6 +218,9 @@ button.drop-down:active {
     padding: 11px 5px 11px 45px;
     margin-left: 12px;
     border-radius: 3px;
+    background-image: url(../img/search-icon.png);
+    background-repeat: no-repeat;
+    background-position: 23px 10px
 }
 
 .search-bar form input.search-input:focus {
@@ -357,13 +413,27 @@ button.drop-down:active {
     padding: 3px 5px 0 5px;
     border-radius: 3px; 
 }
+.owl-theme .owl-controls {
+    position: relative;
+}
 
+.owl-next {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.owl-prev {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
 .owl-theme .owl-controls .owl-page span {
     background: #fff;
 }
 
 .owl-theme .owl-controls .owl-buttons div {
-    background: rgba(60, 78, 108, 0.6);
+    background: rgba(60, 78, 108, 0.8);
     opacity: 0.9;
     font-size: 12px;
     padding: 5px 10px;
@@ -424,6 +494,79 @@ button.drop-down:active {
 
 .left-navigation ul li a:hover {
     text-decoration: underline;
+}
+
+
+.pop-up-nav {
+    padding: 10px;
+}
+
+.pop-up-nav ul li {
+    list-style: none;
+    position: relative;
+    padding-left: 48px;
+    margin-bottom: 9px;
+    height: 33px;
+    display: flex;
+    align-items: center;
+}
+
+.pop-up-nav ul li a {
+    font-size: 12px;
+    text-decoration: none;
+    color: #3b4d6b;
+}
+
+.pop-up-nav ul li a:hover {
+    text-decoration: underline;
+}
+
+.pop-up-nav ul li span.icon {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: url(../img/pop-up-nav-icons.png);
+}
+
+.pop-up-nav ul li span.icon.sports {
+    background-position: 0px 7px; 
+}
+
+.pop-up-nav ul li span.icon.cameras {
+    background-position: 0px -34px; 
+}
+
+.pop-up-nav ul li span.icon.jewelry {
+    background-position: 0px -77px; 
+}
+
+.pop-up-nav ul li span.icon.industrial {
+    background-position: 0px -118px; 
+}
+
+.pop-up-nav ul li span.icon.electronics {
+    background-position: 0px -160px; 
+}
+
+.pop-up-nav ul li span.icon.tools {
+    background-position: 0px -202px; 
+}
+
+.pop-up-nav ul li span.icon.clothing {
+    background-position: 0px -250px; 
+}
+
+.pop-up-nav ul li span.icon.everything {
+    background-position: 0px -291px; 
+}
+
+
+.ads {
+    width: 180px;
+    padding-left: 20px;
 }
 
 .filter {
