@@ -468,14 +468,68 @@ button.drop-down:active {
 }
 
 .shop-items {
-    padding-top: 16px;
+    padding-top: 26px;
 }
 
 .shop-items .item {
-    width: 198px;
-    height: 208px;
-    border: 1px solid #000;
+    width: 200px;
+    height: 210px;
     float: left;
+}
+
+.shop-items .item ul {
+    padding: 0 18px;
+}
+
+.shop-items .item ul li {
+    list-style: none;
+}
+
+.shop-items .item a {
+    text-decoration: none;
+    display: block;
+    padding-top: 20px;
+    padding-bottom: 10px;
+    background: #fff;
+}
+
+.shop-items .item a:hover {
+    -webkit-box-shadow: 1px 1px 1px #ddd, -1px -1px 2px #ddd;
+    box-shadow: 1px 1px 1px #ddd,-1px -1px 2px #ddd;
+    -webkit-transform: scale(1.1);
+    -ms-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: scale(1.1);
+}
+
+.item .item-link .image {
+    text-align: center;
+}
+
+.item .item-link .title {
+    font-size: 12px;
+    color: #333333;
+    height: 50px;
+    line-height: 1.4;
+}
+
+.item .item-link .price {
+    font-size: 15px;
+    color: #3b4d6b;
+    font-weight: bold;
+}
+
+.item .item-link .status {
+    font-size: 11px;
+}
+
+.item .item-link .status .new {
+    color: #ff4242;
+}
+
+.item .item-link .image img {
+    width: 120px;
+    height: 90px;
 }
 
 footer {
