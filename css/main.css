@@ -27,6 +27,7 @@ input:focus {
 
 .top-header {
     height: 63px;
+    min-width: 1000px;
     background: #f5f7ed;
     border-bottom: 1px solid #e5e7de;
 }
@@ -135,6 +136,7 @@ input:focus {
     padding-top: 20px;
     padding-bottom: 20px;
     height: 42px;
+    min-width: 1000px;
 }
 
 .drop-down-nav {
@@ -343,6 +345,7 @@ button.drop-down:active {
 
 .main-slider {
     height: 470px;
+    min-width: 1000px;
     background: url(../img/slider-bg.jpg);
     background-repeat: no-repeat;
     background-position: top center;
@@ -757,6 +760,10 @@ footer {
 .top-footer-block ul li a {
     text-decoration: none;
     color: #fff;
+}
+
+.top-footer-block ul li a:hover {
+    text-decoration: underline;
 }
 
 .top-footer-block .info.time {
