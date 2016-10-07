@@ -531,6 +531,19 @@
 	</footer>
 	<script>
 		$(function(){
+			$('button.drop-down').on('mouseover', function(){
+				$(this).closest('.drop-down-nav').find('.pop-up-nav').fadeIn();
+			});
+			$(document).mouseover(function (e){
+				var div = $(".drop-down-nav"); 
+				if (!div.is(e.target) && div.has(e.target).length === 0) {
+					div.find('.pop-up-nav').fadeOut();
+				}
+			});
+		});
+	</script>
+	<script>
+		$(function(){
 			$(document).ready(function() {
 		  		$(".owl-carousel").owlCarousel({
 		  			navigation : true,

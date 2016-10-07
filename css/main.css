@@ -13,7 +13,7 @@ body {
     /*opacity: 0.8;*/
 }
 body {
-    background: url(../home1.png);
+    /*background: url(../home1.png);*/
     background-position: top center;
     background-repeat: no-repeat;
     font-family:  Arial, Verdana;
@@ -144,6 +144,7 @@ input:focus {
 }
 
 .drop-down-nav .pop-up-nav {
+    display: none;
     position: absolute; 
     top: 57px;
     width: 180px;
@@ -151,6 +152,7 @@ input:focus {
     border-radius: 5px;
     border: 1px solid #bcbcbc;
     z-index: 9;
+
 }
 
 .drop-down-nav .pop-up-nav:after {
@@ -163,6 +165,16 @@ input:focus {
     left: 50%;
     margin-left: -10px;
     background: url(../img/pop-up-arrow.png);
+}
+
+.drop-down-nav .pop-up-nav:before {
+    content: '';
+    display: block;
+    width: 200px;
+    height: 30px;
+    position: absolute;
+    top: -20px;
+    left: 0;
 }
 
 
