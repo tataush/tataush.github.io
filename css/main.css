@@ -93,6 +93,39 @@ h1, h2, h3, h4, h5 {
 	border: 3px solid rgba(255,255,255,1);
 }
 
+.soc {
+    margin: 0;
+    padding: 0;
+}
+
+.soc li {
+    list-style: none;
+    display: inline-block;
+    padding: 0 5px;
+}
+
+.soc li a {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background: red;
+    background: url(../img/soc.png);
+    background-size: 260px;
+    opacity: 0.6;
+    border-radius: 3px;
+    border: 2px solid #fff;
+}
+
+.soc li a.fb {
+    background-position: -165px 0;
+}
+.soc li a.vk {
+    background-position: 0 -54px;
+}
+
+.soc li a:hover{
+    opacity: 1;
+}
 @media screen and (max-width: 700px) {
 	.center-box h1 {
 		font-size: 65px;
