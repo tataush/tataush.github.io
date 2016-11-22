@@ -16,10 +16,7 @@ angular.module('ToDo', ['ionic'])
     $scope.tasks = JSON.parse(localStorage['tasks']); 
   } else {
     $scope.tasks = [
-      {title: 'Купить чайник', description: 'Обязательно синего цвета', done: false},
-      {title: 'Выучить ангулар', description: 'Прочитать еще пару книг', done: true},
-      {title: 'Выучить JS', description: 'Очень важная задача', done: false},
-      {title: 'Слетать в Амстердам', description: 'Там хорошо', done: false}
+      {title: 'Создать новую задачу', description: 'Посмотреть как это работает', done: false},
     ];
   }
   $ionicModal.fromTemplateUrl("views/tesk.html", function(modal){
