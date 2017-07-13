@@ -60,8 +60,6 @@
 	  	data: {
 		    services: table,
 		    print: [],
-		    seen_print: false,
-		    seen_table: true,
 		    total: '0'
 		},
 		methods: {
@@ -101,6 +99,7 @@
 					alert('пусто');
 					return false;
 				}
+
 				this.total = all_summ;
 				this.print = print_table;
 				$('.work-table').hide();
@@ -115,7 +114,6 @@
 			printMe: function (){
 				window.print();
 			}
-
 		}
 	})
 </script>
