@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Stroy</title>
+	<script src="./vue.js"></script>
+	<script src="./jquery.min.js"></script>
+	<script src="./script.js"></script>
+	<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<div id="app" style="width: 800px; margin: 0 auto;">
+	<table class="work-table">
+		<tr>
+			<th>Название</th>
+			<th>Цена</th>
+			<th>Тип</th>
+			<th>Количество</th>
+		</tr>
+		<tr v-for="service in services">
+			<td class="title">{{ service.title }}</td>
+			<td>
+				<input type="number" class="defaul-price" v-model="service.price">
+			</td>
+			<td>{{service.type}}</td>
+			<td>
+				<input type="number" class="amount" value="">
+				<span class="type">{{service.type}}</span>
+			</td>
+		</tr>
+	</table>
+	<br>
+	<table class="print-table" style="display: none;">
+		<tr>
+			<th>Наименование работы</th>
+			<th>Кол-во</th>
+			<th>Измер.</th>
+			<th>Цена, грн</th>
+			<th>Стоимость, грн</th>
+		</tr>
+		<tr v-for="row in print">
+			<td>{{ row.title }}</td>
+			<td>{{ row.work }}</td>
+			<td>{{ row.type }}</td>
+			<td>{{ row.price }}</td>
+			<td>{{ row.amount }}</td>
+		</tr>
+		<tr>
+			<td colspan="5" style="text-align: right;"><strong>Всего: {{ total }} грн</strong></td>
+		</tr>
+	</table>
+	<button @click="getPrice();" class="get-price">Get price</button>
+	<button @click="goBack();" class="go-back" style="display: none;">Go back</button>
+	<button @click="printMe();" class="print" style="display: none; float: right;">Print</button>
+</div>
+
+<script>
+	var app = new Vue({
+	 	el: '#app',
+	  	data: {
+		    services: table,
+		    print: [],
+		    total: '0'
+		},
+		methods: {
+			getPrice: function() {
+				var i = 0,
+					defaul_price = 0,
+					this_amount = 0,
+					all_summ = 0,
+					summ = 0,
+					print_table = [],
+					this_title = '',
+					this_type = '';
+
+				$('.amount').each(function(){
+					if ($(this).val() != "" && $(this).val() != "0" ) {
+
+						this_title = $(this).closest('tr').find('td.title').text();
+						this_type = $(this).closest('tr').find('span.type').text();
+						this_amount = parseInt($(this).val() || 0);
+						defaul_price = parseInt($(this).closest('tr').find('.defaul-price').val() || 0);
+						summ = this_amount * defaul_price;
+						// all_price[i] = summ;
+						all_summ = all_summ + summ;
+
+						print_table.push({
+							"title": this_title,
+							"type": this_type,
+							"work": this_amount,
+							"price": defaul_price,
+							"amount": this_amount * defaul_price
+						})
+						i++;
+					}
+				});
+
+				if ($.isEmptyObject(print_table)) {
+					alert('пусто');
+					return false;
+				}
+
+				this.total = all_summ;
+				this.print = print_table;
+				$('.work-table').hide();
+				$('.get-price').hide();
+				$('.print, .go-back, .print-table').show();
+			},
+			goBack: function() {
+				$('.work-table').show();
+				$('.get-price').show();
+				$('.print, .go-back, .print-table').hide();
+			},
+			printMe: function (){
+				window.print();
+			}
+		}
+	})
+</script>
+</body>
+</html>
