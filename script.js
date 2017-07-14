@@ -8,5 +8,5 @@ var table = [
 	{ title: 'Плитка потолок', price: 270, type: "м.кв" },
 	{ title: 'Плитка потолок', price: 270, type: "м.п" },
 	{ title: 'Плитка пол', price: 250, type: "м.кв" },
-	{ title: 'Плитка пол', price: 250, type: "м.п" },
+	{ title: 'Плитка пол', price: 250, type: "м.п" }
 ]
