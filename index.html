@@ -49,9 +49,9 @@
 			<td colspan="5" style="text-align: right;"><strong>Всего: {{ total }} грн</strong></td>
 		</tr>
 	</table>
-	<button @click="getPrice();" class="get-price">Get price</button>
-	<button @click="goBack();" class="go-back" style="display: none;">Go back</button>
-	<button @click="printMe();" class="print" style="display: none; float: right;">Print</button>
+	<button @click="getPrice();" class="get-price">Посчитать</button>
+	<button @click="goBack();" class="go-back" style="display: none;">Назад</button>
+	<button @click="printMe();" class="print" style="display: none; float: right;">Распечатать</button>
 </div>
 
 <script>
@@ -81,7 +81,6 @@
 						this_amount = parseInt($(this).val() || 0);
 						defaul_price = parseInt($(this).closest('tr').find('.defaul-price').val() || 0);
 						summ = this_amount * defaul_price;
-						// all_price[i] = summ;
 						all_summ = all_summ + summ;
 
 						print_table.push({
