@@ -25,8 +25,8 @@
 			</td>
 			<td class="type">{{service.type}}</td>
 			<td class="your-amount">
-				<input type="number" class="amount" value="">
-				<span class="text">{{service.type}}</span>
+				<input type="text" class="amount" value="">
+				<span class="type">{{service.type}}</span>
 			</td>
 		</tr>
 	</table>
@@ -79,7 +79,7 @@
 						this_title = $(this).closest('tr').find('td.title').text();
 						this_type = $(this).closest('tr').find('span.type').text();
 						this_amount = parseInt($(this).val() || 0);
-						defaul_price = parseInt($(this).closest('tr').find('.defaul-price').val() || 0);
+						defaul_price = parseInt($(this).closest('tr').find('.defaul-price input').val() || 0);
 						summ = this_amount * defaul_price;
 						all_summ = all_summ + summ;
 
