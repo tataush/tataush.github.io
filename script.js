@@ -10,3 +10,8 @@ var table = [
 	{ title: 'Плитка пол', price: 250, type: "м.кв" },
 	{ title: 'Плитка пол', price: 250, type: "м.п" }
 ]
+
+var table_2 = [
+	{ title: 'что то', price: 100, type: "м.кв" },
+	{ title: 'что то еще', price: 100, type: "м.п" }
+]

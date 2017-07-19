@@ -14,21 +14,35 @@
 	<table class="work-table">
 		<tr>
 			<th>Название</th>
-			<th>Цена</th>
-			<th>Тип</th>
+			<th style="text-align: right;">Цена</th>
 			<th><span class="desctop-title">Количество</span> <span class="mobile-title">Кол-во</span></th>
+			<th>Тип</th>
 		</tr>
 		<tr v-for="service in services">
 			<td class="title">{{ service.title }}</td>
 			<td class="defaul-price">
 				<input type="number" v-model="service.price">
 			</td>
-			<td class="type">{{service.type}}</td>
 			<td class="your-amount">
 				<input type="number" class="amount" value="">
 				<span class="type" style="display: none;">{{service.type}}</span>
 			</td>
+			<td class="type">{{service.type}}</td>
 		</tr>
+		<tbody>
+			<tr v-for="service in table_2">
+			<td class="title">{{ service.title }}</td>
+			<td class="defaul-price">
+				<input type="number" v-model="service.price">
+			</td>
+			<td class="your-amount">
+				<input type="number" class="amount" value="">
+				<span class="type" style="display: none;">{{service.type}}</span>
+			</td>
+			<td class="type">{{service.type}}</td>
+		</tr>
+		</tbody>
+		
 	</table>
 	<table class="print-table" style="display: none;">
 		<tr>
@@ -59,6 +73,7 @@
 	 	el: '#app',
 	  	data: {
 		    services: table,
+		    table_2: table_2,
 		    print: [],
 		    total: '0'
 		},
