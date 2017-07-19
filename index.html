@@ -21,12 +21,12 @@
 		<tr v-for="service in services">
 			<td class="title">{{ service.title }}</td>
 			<td class="defaul-price">
-				<input type="number" v-model="service.price">
+				<input type="text" v-model="service.price">
 			</td>
 			<td class="type">{{service.type}}</td>
 			<td class="your-amount">
 				<input type="number" class="amount" value="">
-				<span class="type">{{service.type}}</span>
+				<span class="text">{{service.type}}</span>
 			</td>
 		</tr>
 	</table>
