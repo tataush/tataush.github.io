@@ -137,6 +137,56 @@ button:hover {
 	background: #009483;
 }
 
+#app {
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+table tr th .mobile-title {
+	display: none;
+}
+
+@media screen and (max-width: 800px) {
+	#app {
+		padding: 0 5px;
+	}
+	table tr th  {
+		font-size: 12px;
+	}
+	table tr th .desctop-title {
+		display: none;
+	}
+
+	table tr th .mobile-title {
+		display: block;
+	}
+	
+
+	table tr td {
+		font-size: 12px; 
+	}
+	table tr th:first-child,
+	table tr td:first-child {
+		width: 60%;
+	}
+	table tr td.type {
+		padding-left: 2px;
+		width: 40px;
+	}
+	table tr td.defaul-price {
+		width: 40px;
+	}
+	table tr td.defaul-price input {
+		width: 30px;
+	}
+	table tr td input.amount {
+		width: 35px;
+	}
+	table tr td.your-amount {
+		width: 50px;
+	}
+}
+
 @media print {
 	button {
 		display: none !important; 

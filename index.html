@@ -10,13 +10,13 @@
 	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<div id="app" style="max-width: 800px; margin: 0 auto;">
+<div id="app">
 	<table class="work-table">
 		<tr>
 			<th>Название</th>
 			<th>Цена</th>
 			<th>Тип</th>
-			<th>Количество</th>
+			<th><span class="desctop-title">Количество</span> <span class="mobile-title">Кол-во</span></th>
 		</tr>
 		<tr v-for="service in services">
 			<td class="title">{{ service.title }}</td>
