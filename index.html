@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Stroy</title>
 	<script src="./vue.js"></script>
 	<script src="./jquery.min.js"></script>
@@ -9,7 +10,7 @@
 	<link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<div id="app" style="width: 800px; margin: 0 auto;">
+<div id="app" style="max-width: 800px; margin: 0 auto;">
 	<table class="work-table">
 		<tr>
 			<th>Название</th>
@@ -19,17 +20,16 @@
 		</tr>
 		<tr v-for="service in services">
 			<td class="title">{{ service.title }}</td>
-			<td>
-				<input type="number" class="defaul-price" v-model="service.price">
+			<td class="defaul-price">
+				<input type="number" v-model="service.price">
 			</td>
-			<td>{{service.type}}</td>
-			<td>
+			<td class="type">{{service.type}}</td>
+			<td class="your-amount">
 				<input type="number" class="amount" value="">
 				<span class="type">{{service.type}}</span>
 			</td>
 		</tr>
 	</table>
-	<br>
 	<table class="print-table" style="display: none;">
 		<tr>
 			<th>Наименование работы</th>

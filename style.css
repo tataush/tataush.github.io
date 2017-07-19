@@ -3,7 +3,8 @@
 	padding: 0;
 }
 table {
-	width: 800px;
+	width: 100%;
+	max-width: 800px;
 	margin: 10px auto;
 	font-family: arial;
 	border-spacing: 0;
@@ -40,15 +41,20 @@ table tr th {
 	font-weight: 500;
 }
 
+table tr td.defaul-price  {
+	width: 70px;
+	padding-right: 0
+}
 
-table tr td.price input {
+table tr td.defaul-price input {
 	text-align: right;
 	background: none;
 	border: none;
-	font-size: 16px;
-	width: 40px;
+	font-size: 14px;
+	width: 60px;
 	padding: 5px;
 	padding-right: 0;
+	text-align: right;
 }
 
 
@@ -56,7 +62,16 @@ table tr td.price span {
 	color: #999;
 }
 
-table tr td.amount input {
+table tr td.type {
+	width: 70px;
+	padding-left: 0;
+}
+table tr td.your-amount {
+	width: 160px;
+}
+
+
+table tr td input.amount {
 	border: 1px solid;
 	height: 15px;
 	width: 75px;
