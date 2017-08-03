@@ -13,11 +13,18 @@
 <div id="app">
 	<table class="work-table">
 		<tr>
-			<th>Название</th>
-			<th style="text-align: right;">Цена</th>
+			<th style="text-align:left;">Название</th>
+			<th>Цена</th>
 			<th><span class="desctop-title">Количество</span> <span class="mobile-title">Кол-во</span></th>
-			<th>Тип</th>
+			<th style="text-align:left;">Тип</th>
 		</tr>
+		<tbody>
+			<tr>
+				<td colspan="4" class="table-title">
+					Плиточные работы
+				</td>
+			</tr>
+		</tbody>
 		<tr v-for="service in services">
 			<td class="title">{{ service.title }}</td>
 			<td class="defaul-price">
@@ -30,19 +37,125 @@
 			<td class="type">{{service.type}}</td>
 		</tr>
 		<tbody>
-			<tr v-for="service in table_2">
-			<td class="title">{{ service.title }}</td>
-			<td class="defaul-price">
-				<input type="number" v-model="service.price">
-			</td>
-			<td class="your-amount">
-				<input type="number" class="amount" value="">
-				<span class="type" style="display: none;">{{service.type}}</span>
-			</td>
-			<td class="type">{{service.type}}</td>
-		</tr>
+			<tr>
+				<td colspan="4" class="table-title">
+					Монтаж систем кондиционирования
+				</td>
+			</tr>
 		</tbody>
-		
+		<tbody>
+			<tr v-for="service in table_2">
+				<td class="title">{{ service.title }}</td>
+				<td class="defaul-price">
+					<input type="number" v-model="service.price">
+				</td>
+				<td class="your-amount">
+					<input type="number" class="amount" value="">
+					<span class="type" style="display: none;">{{service.type}}</span>
+				</td>
+				<td class="type">{{service.type}}</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<td colspan="4" class="table-title">
+					Гипсокартонные работы
+				</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr v-for="service in table_3">
+				<td class="title">{{ service.title }}</td>
+				<td class="defaul-price">
+					<input type="number" v-model="service.price">
+				</td>
+				<td class="your-amount">
+					<input type="number" class="amount" value="">
+					<span class="type" style="display: none;">{{service.type}}</span>
+				</td>
+				<td class="type">{{service.type}}</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<td colspan="4" class="table-title">
+					Сантехнические работы
+				</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr v-for="service in table_4">
+				<td class="title">{{ service.title }}</td>
+				<td class="defaul-price">
+					<input type="number" v-model="service.price">
+				</td>
+				<td class="your-amount">
+					<input type="number" class="amount" value="">
+					<span class="type" style="display: none;">{{service.type}}</span>
+				</td>
+				<td class="type">{{service.type}}</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<td colspan="4" class="table-title">
+					Штукатурно-малярные работы
+				</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr v-for="service in table_5">
+				<td class="title">{{ service.title }}</td>
+				<td class="defaul-price">
+					<input type="number" v-model="service.price">
+				</td>
+				<td class="your-amount">
+					<input type="number" class="amount" value="">
+					<span class="type" style="display: none;">{{service.type}}</span>
+				</td>
+				<td class="type">{{service.type}}</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<td colspan="4" class="table-title">
+					Электромонтажные работы
+				</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr v-for="service in table_6">
+				<td class="title">{{ service.title }}</td>
+				<td class="defaul-price">
+					<input type="number" v-model="service.price">
+				</td>
+				<td class="your-amount">
+					<input type="number" class="amount" value="">
+					<span class="type" style="display: none;">{{service.type}}</span>
+				</td>
+				<td class="type">{{service.type}}</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr>
+				<td colspan="4" class="table-title">
+					Демонтажно-подготовительные работы
+				</td>
+			</tr>
+		</tbody>
+		<tbody>
+			<tr v-for="service in table_7">
+				<td class="title">{{ service.title }}</td>
+				<td class="defaul-price">
+					<input type="number" v-model="service.price">
+				</td>
+				<td class="your-amount">
+					<input type="number" class="amount" value="">
+					<span class="type" style="display: none;">{{service.type}}</span>
+				</td>
+				<td class="type">{{service.type}}</td>
+			</tr>
+		</tbody>
 	</table>
 	<table class="print-table" style="display: none;">
 		<tr>
@@ -74,6 +187,11 @@
 	  	data: {
 		    services: table,
 		    table_2: table_2,
+		    table_3: table_3,
+		    table_4: table_4,
+		    table_5: table_5,
+		    table_6: table_6,
+		    table_7: table_7,
 		    print: [],
 		    total: '0'
 		},
@@ -93,8 +211,8 @@
 
 						this_title = $(this).closest('tr').find('td.title').text();
 						this_type = $(this).closest('tr').find('span.type').text();
-						this_amount = parseInt($(this).val() || 0);
-						defaul_price = parseInt($(this).closest('tr').find('.defaul-price input').val() || 0);
+						this_amount = parseFloat($(this).val() || 0);
+						defaul_price = parseFloat($(this).closest('tr').find('.defaul-price input').val() || 0);
 						summ = this_amount * defaul_price;
 						all_summ = all_summ + summ;
 
@@ -130,6 +248,11 @@
 			}
 		}
 	})
+	$(function(){
+		$('.table-title').click(function(){
+			$(this).closest('tbody').next().slideToggle();
+		});
+	});
 </script>
 </body>
 </html>

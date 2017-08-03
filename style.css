@@ -18,6 +18,7 @@ table tr td {
 	border-bottom: 1px solid #999;
 	padding: 3px 5px;
 	font-size: 14px;
+	border-right: 1px solid #999; 
 }
 
 table tr th:first-child,
@@ -30,15 +31,24 @@ table tr td:last-child {
 }
 
 
+table tr td.table-title {
+	padding: 10px;
+	background: #00ccb4 !important;
+    color: #fff;
+    text-shadow: 1px 1px 1px #666;
+}
+
+
 table tr th {
 	padding: 10px 5px;
-	// background: #00ccb4;
+	border-right: 1px solid #999; 
 	border-top: 1px solid #999;
 	border-bottom: 1px solid #999;
-	background: #999;
-	color: #fff;
-	text-shadow: 1px 1px 1px #666;
+	background: #efefef;
+	color: #000;
+	// text-shadow: 1px 1px 1px #666;
 	font-weight: 500;
+	text-align: center
 }
 
 table tr td.defaul-price  {
@@ -51,9 +61,8 @@ table tr td.defaul-price input {
 	background: none;
 	border: none;
 	font-size: 14px;
-	width: 60px;
+	width: 40px;
 	padding: 5px;
-	padding-right: 0;
 	text-align: right;
 }
 
@@ -64,7 +73,6 @@ table tr td.price span {
 
 table tr td.type {
 	width: 70px;
-	padding-left: 0;
 }
 table tr td.your-amount {
 	width: 90px;
@@ -137,6 +145,13 @@ button {
 button:hover {
 	background: #009483;
 }
+.print-table td {
+	text-align: center;
+}
+.print-table th:first-child,
+.print-table td:first-child {
+	text-align: left
+}
 
 #app {
 	max-width: 800px;
@@ -169,10 +184,6 @@ input::-webkit-inner-spin-button {
 		display: block;
 	}
 	
-
-	table tr td {
-		font-size: 12px; 
-	}
 	table tr th:first-child,
 	table tr td:first-child {
 		width: 60%;
@@ -198,5 +209,10 @@ input::-webkit-inner-spin-button {
 @media print {
 	button {
 		display: none !important; 
+	}
+	table,
+	table tr td {
+		font-size: 12px;
+		border-color: #000;
 	}
 }
