@@ -80,3 +80,26 @@ body {
 .section_right {
 	float: right;
 }
+
+@media screen and (max-width: 845px) {
+	.page-container {
+		position: static;
+		transform: none;
+	}
+	.section {
+		margin: 10px auto;
+	}
+	.section_left {
+		float: none;
+	}
+
+	.section_right {
+		float: none;
+	}
+}
+
+@media screen and (max-width: 410px) {
+	.section {
+		width: 260px;
+	}
+}
