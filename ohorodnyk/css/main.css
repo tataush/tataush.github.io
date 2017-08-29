@@ -16,8 +16,13 @@ body {
     background-attachment: fixed,fixed,fixed;
     font-family: 'SansPro';
     width: 100%;
+    min-height: 100%;
     overflow-x: hidden;
     letter-spacing: 3px;
+    position: relative;
+    padding-bottom: 50px;
+    min-height: 100vh;
+    box-sizing: border-box;
 }
 
 .page-container {
@@ -143,7 +148,7 @@ footer {
 	right: 0;
 	bottom: 0;
 	color: #fff;
-	padding: 10px 0;
+	padding: 10px;
 	text-align: center;
 	text-transform: uppercase;
 	font-size: 14px;
@@ -172,6 +177,11 @@ footer a {
 
 @media screen and (max-width: 410px) {
 	.section {
-		width: 260px;
+		width: 280px;
+		padding: 45px 10px 45px 10px;
+	}
+	.avatar:after {
+		left: -10px;
+    	width: calc(100% + 20px);
 	}
 }
