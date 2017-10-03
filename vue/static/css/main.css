@@ -1,0 +1,64 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  // background: #999;
+  min-height: 100vh;
+}
+.main-header {
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.25);
+  transition: background-color 0.3s ease-in-out;
+  background: #fff;
+  padding: 0 20px;
+}
+.main-header ul {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+  float: right;
+}
+.main-header ul li {
+  display: inline-block;
+  list-style: none;
+  padding: 0 0 0 20px;
+  line-height: 44px;
+}
+.main-header ul li a {
+  color: #34495e;
+  font-size: 14px;
+  text-decoration: none;
+  padding-bottom: 6px;
+}
+.main-header ul li a:hover,
+.main-header ul li a.nuxt-link-exact-active {
+  border-bottom: 3px solid #42b983;
+  padding-bottom: 3px;
+}
+.clearfix:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: all .2s;
+}
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+.main-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+input:focus,
+button:focus,
+input:active,
+button:active {
+  outline: none;
+}

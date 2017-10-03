@@ -48,7 +48,7 @@ export default {
     }
 
     .login-form h1 span {
-        color: #999;
+        color: #fff;
     }
     .login-form form {
         display: table;

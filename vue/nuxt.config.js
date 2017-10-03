@@ -14,8 +14,5 @@ module.exports = {
         { name: 'keywords', content: 'keyword 1, keyword 2'},
         { hid: 'description', name: 'description', content: 'This is the generic description.'}
       ]
-    },
-    build: {
-      vendor: ['axios']
     }
   }

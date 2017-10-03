@@ -1,27 +1,26 @@
-
 <template>
-  <div>
-      <button @click="show">get</button>
-  </div>
+	<div class="container">
+		<ul>
+			<li v-for="user in users"> {{ users }} </li>
+		</ul>
+	</div>
 </template>
 
 <script>
 import axios from 'axios';
 export default {
-     data: function() {
-        return { 
-            title: {},
-            id: 2
-        }
-    },
-    methods: {
-       show: function() {
-            axios.get('http://jsonplaceholder.typicode.com/users/').then(function(response){
-                console.log(response.data)
-            }, function(){
-                
-            })
-       }
-    }
+	data () {
+		return {
+			users: []
+		}
+	},
+	created() {
+		    axios.get('/users.json').then(response => {
+		   	this.users = response.data;
+		   	console.log(this.users)
+		}, function(e){
+			console.log('error');
+		});
+	}
 }
 </script>
