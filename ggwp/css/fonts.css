@@ -1,0 +1,11 @@
+@font-face {
+    font-family: "Circe";
+    src: url(../fonts/CirceRounded.otf);
+    src: url(../fonts/CirceRounded.woff);
+}
+
+@font-face {
+    font-family: "CirceBold";
+    src: url(../fonts/CirceRoundedAltBold.otf);
+    src: url(../fonts/CirceRoundedAltBold.woff2);
+}
