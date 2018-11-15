@@ -1,0 +1,196 @@
+@media screen and (max-width: 1200px) {
+    .logo {
+        margin-left: 15px;
+    }
+
+    .header-cotainer {
+        max-width: 940px;
+    }
+    .container {
+        max-width: 940px;
+    }
+    .navigation_link {
+        font-size: 14px;
+    }
+    .main-section {
+        background-size: 600px;
+    }
+
+    .main-info h1 {
+        font-size: 24px;
+    }
+    .main-info h2 {
+        font-size: 36px;
+    }
+    .apply {
+        font-size: 14px;
+        height: 46px;
+        width: 198px;
+    }
+    .info p {
+        font-size: 18px;
+    }
+    .title {
+        font-size: 24px;
+    }
+
+    .classes_container {
+        min-height: 303px;
+        padding: 38px 12px 12px 12px;
+    }
+
+
+    .classes_title h4 {
+        font-size: 16px;
+    }
+    
+    .classes_title h4 {
+        font-size: 16px;
+    }
+    .classes_description {
+        font-size: 14px;
+        padding: 16px 12px;
+        
+    }
+    .because-we {
+        background-size: 400px;
+    }
+    .because-we_title {
+        font-size: 16px;
+    }
+
+    .because-we_description {
+        font-size: 14px;
+    }
+    .main-feature_description {
+        padding:55px 365px 100px 45px;
+    }
+    .main-feature_description h2 {
+        font-size: 24px;
+    }
+    
+    .team_work p {
+        font-size: 16px;
+        padding-left: 63px;
+    }
+
+    .team_sommelier {
+        width: 213px;
+        height: 267px;
+    }
+    .team_sommelier_avatar {
+        width: 78px;
+        height: 108px;
+        background-size: 150px;
+        margin: 0 auto;
+    }
+    
+    .team_sommelier p {
+        font-size: 12px;
+    }
+
+    .our-team_icons {
+        width: 395px;
+    }
+
+    .work-with-us_container p {
+        font-size: 18px;
+    }
+
+    .work-with-us_container {
+        padding-top: 20px;
+        font-size: 18px;
+    }
+}
+
+
+@media screen and (max-width: 991px) {
+    .main-section {
+        min-height: 600px;
+        padding-bottom: 30px;
+        height: auto;
+        background-size: 59%; 
+    }
+    .main-info {
+        padding-top: 50px;
+    }
+
+    .main-info h2 {
+        margin-bottom: 30px;
+    }
+    .classes_list {
+        max-width: 565px;
+        margin: 0 auto;
+    }
+    .classes_item {
+        width: 50%;
+    }
+    .classes_container {
+        min-height: 291px;
+    }
+
+    .classes_description {
+        padding: 16px 0;
+    }
+    .classes_icon {
+        width: 43px;
+        height: 43px;
+    }
+
+    .why-we strong {
+        font-size: 18px;
+        max-width: 480px;
+    }
+    .because-we {
+        padding-left: 0;
+        margin-top: 20px;
+        padding-top: 500px;
+        background: url('../img/rockets.svg') top center no-repeat;
+        background-size:320px; 
+    }
+
+    .because-we_list {
+        display: table;
+        margin: 0 auto;
+    }
+    .main-feature_description {
+        padding: 25px 265px 30px 45px;
+        background-size: 250px;
+    }
+    .main-feature_description h2 {
+        font-size: 18px;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+    .our-team_icons {
+        float: none;
+        width: auto;
+    }
+
+    .our-team_list {
+        float: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .our-team_avatar {
+        margin: 0 15px;
+    }
+    .our-team_sommelier {
+        float: none;
+        display: block;
+        height: auto;
+    }
+
+    .team_sommelier {
+        margin: 40px auto;
+    }
+    .our-team_description {
+        float: none;
+        margin: 0 auto;
+        width: 75%;
+    }
+}
