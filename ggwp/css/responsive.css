@@ -9,6 +9,7 @@
     .container {
         max-width: 940px;
     }
+
     .navigation_link {
         font-size: 14px;
     }
@@ -105,6 +106,9 @@
 
 
 @media screen and (max-width: 991px) {
+    .navigation {
+        padding-left: 15px;
+    }
     .main-section {
         min-height: 600px;
         padding-bottom: 30px;
