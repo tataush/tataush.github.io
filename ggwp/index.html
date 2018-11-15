@@ -6,7 +6,7 @@
 	<link rel="stylesheet" href="./css/normalize.min.css">
 	<link rel="stylesheet" href="./css/main.css">
 	<link rel="stylesheet" href="./css/responsive.css">
-	
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -37,7 +37,7 @@
 				<div class="main-info">
 				<h1>Продвигаем и издаем</h1>
 				<h2>С тебя игра, <br>с нас <span class="green-text">геймеры!</span></h2>
-				<button class="apply">Подать заявку</button>
+				<button class="apply open-modal">Подать заявку</button>
 			</div>
 			</div>
 		</section>
@@ -194,7 +194,7 @@
 				</div>
 				<div class="text-center">
 					<h2 class="title">Конвертируем ваши идеи в игры, сайты, результаты</h2>
-					<button class="apply">Подать заявку</button>
+					<button class="apply open-modal">Подать заявку</button>
 				</div>
 			</div>
 		</section>
@@ -258,13 +258,58 @@
 				<div class="work-with-us_container">
 					<p>Серьезно? Потому, что в первую очередь,  каждый из нас провел тысячи часов за играми, а кто сможет лучше всего продать игру чем игрок. Кроме того, мы собрали специалистов в своих сферах: талантливых копирайтеров, виртуозов продающих стратегий, любителей зависать в соц.сетях, обаятельных болтунов и прочий нужный люд. Они точно знают, как пошуметь вокруг новинки, кому показать, рассказать и кого уболтать, чтобы ваша игра попала точно в руки игроку, способному оценить ее по достоинству.</p>
 					<strong>Мы готовы делиться уникальным опытом и знаниями о том, как продвигать игры</strong>
-					<button class="apply">Подать заявку</button>
+					<button class="apply open-modal">Подать заявку</button>
 				</div>
 			</div>
 		</section>
 		<footer>
 			
 		</footer>
+		<div class="modal">
+			<div class="modal_container">
+				<div class="form">
+					<form action="#">
+						<div class="form-row error">
+							<label>Имя <span class="error-msg">неверно</span></label>
+							<div  class="form-input">
+								<input type="text" name="name" placeholder="Введите ваше имя">
+							</div>
+						</div>
+						<div class="form-row">
+							<label>Эл. адрес <span class="error-msg">неверный</span></label>
+							<div  class="form-input">
+								<input class="form-input" type="email" name="email" placeholder="Введите ваш эл. адрес">
+							</div>
+						</div>
+						<div class="form-row">
+							<label>Запрос</label>
+							<div  class="form-input">
+								<textarea name="message" placeholder="Сформулируйте вкратце заявку"></textarea>
+							</div>
+						</div>
+						<div class="form-row text-center form-submit">
+							<button class="apply submit-form">Подтвердить заявку</button>
+						</div>
+					</form>
+				</div>
+				<div class="modal_bg"></div>
+			</div>	
+		</div>
+		<span class="close-modal"></span>
 	</div>
+<script>
+	$(function(){
+		$('.open-modal').click(function(){
+			$('.modal').fadeIn(200);
+		});
+		$('.modal_bg').click(function(){
+			$('.modal').fadeOut(200);
+		})
+		$('.submit-form').click(function(e){
+			e.preventDefault();
+			$('.modal').fadeOut(200);
+		});
+	})
+</script>
 </body>
 </html>
