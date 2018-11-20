@@ -107,7 +107,7 @@
 
 @media screen and (max-width: 991px) {
     .navigation {
-        padding-left: 15px;
+        padding-right: 15px;
     }
     .main-section {
         min-height: 600px;
@@ -196,5 +196,124 @@
         float: none;
         margin: 0 auto;
         width: 75%;
+    }
+
+    .info p {
+        font-size: 16px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .title {
+        font-size: 16px;
+    }
+    .navigation {
+        display: none;
+    }
+    .main-section {
+        background: url('../img/full-illustration.svg') center bottom 20px no-repeat;
+        min-height: 900px;
+    }
+    .main-info {
+        text-align: center;
+    }
+
+    .apply {
+        width: 100%;
+    }
+
+    .because-we {
+        background-size: 200px;
+        padding-top: 320px; 
+    }
+
+    .because-we_header {
+        display: block;
+        text-align: center;
+    }
+
+    .because-we_icon {
+        width: auto;
+    }
+
+    .because-we_title {
+        margin: 15px 0;
+    }
+
+    .because-we_description {
+        text-align: center;
+    }
+    .info {
+        padding: 50px 0;
+    }
+    .info p {
+        font-size: 14px;
+    }
+    .classes_item {
+        width: 100%;
+    }
+    .why-we {
+        padding-bottom: 70px;
+    }
+    .main-feature {
+        padding-bottom: 70px;
+    }
+    .main-feature_description {
+        padding:0;
+        background-position: top 60px center;
+        box-shadow: none;
+        margin-bottom: 50px;
+        margin-top: 50px;
+    }
+    .main-feature_description h2 {
+        margin-bottom: 280px;
+        max-width: 70%;
+    }
+    
+    .main-feature h2.title {
+        margin-bottom: 20px;
+    }
+
+    .our-team_list {
+        display: none;
+    }
+
+    .our-team_description {
+        width: 100%;
+        min-height: auto;
+        padding-top: 0;
+    }
+
+    .team_work {
+        padding-left: 40px;
+    }
+
+    .our-team {
+        padding: 70px 0;
+    }
+    .team_work:after {
+        width: 13px;
+        left: 21px;
+    }
+
+    .team_work p {
+        padding-left: 17px;
+        line-height: 1;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .team_work p:before {
+        width: 16px;
+        height: 16px;
+        left: -11px;
+        top: 8px;
+    }
+    .work-with-us {
+        padding-bottom: 70px;
+    }
+    .work-with-us_container p {
+        font-size: 14px;
     }
 }
