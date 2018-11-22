@@ -19,16 +19,16 @@
 					</a>
 					<ul class="navigation">
 						<li class="navigation_item">
-							<a href="#" class="navigation_link navigation_link-active">Услуги</a>
+							<a href="#what-we-do" class="navigation_link">Услуги</a>
 						</li>
 						<li class="navigation_item">
-							<a href="#" class="navigation_link">Почему мы</a>
+							<a href="#why-we" class="navigation_link">Почему мы</a>
 						</li>
 						<li class="navigation_item">
-							<a href="#" class="navigation_link">Схема работы</a>
+							<a href="#scheme-of-work" class="navigation_link">Схема работы</a>
 						</li>
 						<li class="navigation_item">
-							<a href="#" class="navigation_link">Контакты</a>
+							<a href="#contacts" class="navigation_link">Контакты</a>
 						</li>
 					</ul>
 				</div>
@@ -46,7 +46,7 @@
 				<p>Как думаешь, когда следует начинать работу над продвижением продукта? Если твое мнение, что на этапе разработки, значит ты попадаешь “в десяточку”. Еще до релиза мы начинаем создавать шумиху, писать пресс-киты, готовиться к изданию и многое другое. Ты умеешь создавать крутые игры, мы умеем привлекать к ним внимание. </p>
 			</div>
 		</section>
-		<section class="what-we-do">
+		<section class="what-we-do" id="what-we-do">
 			<div class="container">
 				<h2 class="title text-center">Что мы делаем:</h2>
 				<div class="classes_list clearfix">
@@ -127,7 +127,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="why-we">
+		<section class="why-we" id="why-we">
 			<div class="container">
 				<div class="text-center">
 					<strong class="text-center">Обращаясь к нам, ты получаешь весомое конкурентное преимущество перед другими разработчиками.</strong>
@@ -185,7 +185,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="main-feature">
+		<section class="main-feature" id="main-feature">
 			<div class="container">
 				<div class="main-feature_description">
 					<h2>В чем главная фишка GGWP agency</h2>
@@ -198,10 +198,10 @@
 				</div>
 			</div>
 		</section>
-		<section class="scheme-of-work">
+		<section class="scheme-of-work" id="scheme-of-work">
 			<div class="container">
 				<h2 class="title text-center">Схема работы с нами:</h2>
-				<div class="scheme_list">
+				<div class="scheme_list clearfix">
 					<div class="scheme_item">
 						<div class="scheme">
 							<div class="scheme_content">
@@ -262,7 +262,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="our-team">
+		<section class="our-team" id="our-team">
 			<div class="container">
 				<h2 class="title text-center">Наша команда:</h2>
 				<div class="our-team_container clearfix">
@@ -311,7 +311,7 @@
 				</div>
 			</div>
 		</section>
-		<section class="work-with-us">
+		<section class="work-with-us" id="work-with-us">
 			<div class="container">
 				<h2 class="title text-center">Зачем работать с нами?</h2>
 				<div class="work-with-us_container">
@@ -321,7 +321,7 @@
 				</div>
 			</div>
 		</section>
-		<footer>
+		<footer id="contacts">
 			<div class="container clearfix">
 				<div class="socials">
 					<ul>
@@ -341,7 +341,7 @@
 				</div>
 				<div class="contacts">
 					<h5>Контакты:</h5>
-					<p>тел: <a href="tel:+380934256787">+380934256787</a></p>
+					<p>тел: <a href="tel:+380631863022">+380631863022</a></p>
 					<p>email: <a href="mailto:anton@gmail.com">anton@gmail.com</a></p>
 				</div>
 			</div>
@@ -360,8 +360,8 @@
 		<div class="modal">
 			<div class="modal_container">
 				<div class="form">
-					<form action="#">
-						<div class="form-row error">
+					<form action="#" id="form">
+						<div class="form-row">
 							<label>Имя <span class="error-msg">неверно</span></label>
 							<div  class="form-input">
 								<input type="text" name="name" placeholder="Введите ваше имя">
@@ -384,6 +384,10 @@
 						</div>
 					</form>
 				</div>
+				<div class="success_msg">
+					<h2 class="title">Ваша заявка принята!</h2>
+					<p>В ближайшее время наш менеджер свяжется с вами для обсуждения деталей</p>
+				</div>
 				<div class="modal_bg"></div>
 			</div>	
 		</div>
@@ -391,16 +395,74 @@
 	</div>
 <script>
 	$(function(){
-		$('.open-modal').click(function(){
+		var showModal = function(){
 			$('.modal').fadeIn(200);
+			$('.wrapper').addClass('open-modal');
+		}
+		var hideModal = function(){
+			$('.modal').fadeOut(200);
+			$('.wrapper').removeClass('open-modal');
+			$('.modal').removeClass('success');
+		}
+
+		var success_send = function() {
+			$('.modal').addClass('success');
+			setTimeout(function(){
+				hideModal();
+				$('#form input, #form textarea').val('');
+			}, 3000)
+		}
+		$('.open-modal').click(function(){
+			showModal();
 		});
 		$('.modal_bg').click(function(){
-			$('.modal').fadeOut(200);
+			hideModal();
 		})
+		$(".navigation_link").click(function () {
+			var elementClick = $(this).attr("href");
+			var destination = $(elementClick).offset().top;
+			$('body, html').animate({ scrollTop: destination }, 1500);
+			return false; 
+		});
+
+
 		$('.submit-form').click(function(e){
 			e.preventDefault();
-			$('.modal').fadeOut(200);
-		});
+			var error = false;
+			var $form = $('#form');
+			function getFormData(){
+				var unindexed_array = $form.serializeArray();
+				var indexed_array = {};
+
+				$.map(unindexed_array, function(n, i){
+					indexed_array[n['name']] = n['value'];
+				});
+
+				return indexed_array;
+			}
+			var data = getFormData($form);
+			var email = data.email;
+			function isEmail(email) {
+				var regex = /^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+				return regex.test(email);
+			}
+			var validEmail = isEmail(email);
+			if(data.name == '') {
+				$('#form input[name=name]').closest('.form-row').addClass('error')
+				error = true;
+			}
+			if (!validEmail) {
+				$('#form input[name=email]').closest('.form-row').addClass('error')
+				error = true;
+			}
+			$('#form input').on('input', function(){
+				$(this).closest('.form-row').removeClass('error');
+			})	
+			if (!error) {
+				console.log(data) // user data to send 
+				success_send();
+			}
+		})
 	})
 </script>
 </body>
