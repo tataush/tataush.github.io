@@ -14,18 +14,24 @@
     </div>
     <div class="all_offers" v-if="showAll">
       <div v-for="(item, index) in sortedItems" :key="index" class="offer_detale">
-        <div>
-          <span>Время в пути: {{item.duration_formated}}</span>
+        <div v-for="(item, index) in item.flights_info" :key="index">
+          <div>
+            <span>{{item.departure_city}} ({{item.departure_airport}})</span>
+            <span>&rarr;</span>
+            <span>{{item.arrival_city}} ({{item.arrival_airport}})</span>
+          </div>
         </div>
         <div>
           <span v-if="item.stops === '0'">Без пересадок</span>
           <span v-else>Пересадок: {{item.stops}}</span>
         </div>
-       <div>
+        <div>
+          <span>Время в пути: {{item.duration_formated}}</span>
+        </div>
+        <div>
           <span>Цена: {{item.price}} <span class="currency">{{currency}}</span></span>
-       </div>
+        </div>
       </div>
-
     </div>
   </div>
 </template>
