@@ -35,22 +35,17 @@ export default {
   props: ['offer', 'currency'],
   data () {
     return {
-      showAll: false,
-      offer_segments: null,
-    }
-  },
-  methods: {
-    even: function(arr) {
+      showAll: false
     }
   },
   computed: {
     segments () {
       return this.offer.offers[0].segments
     },
-    sortedItems(){
-      return this.offer.offers[0].segments.slice().sort(function(a, b) {
-        return a.price + b.price;
-      });
+    sortedItems () {
+      return this.offer.offers[0].segments.slice().sort(function (a, b) {
+        return a.price + b.price
+      })
     }
   }
 }
@@ -131,6 +126,6 @@ export default {
 
 .offer_detale {
   padding: 10px;
-  border-top: 1px solid #bbb; 
+  border-top: 1px solid #bbb;
 }
 </style>
