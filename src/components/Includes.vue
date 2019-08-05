@@ -56,7 +56,6 @@
             this.selectedProducts.splice(index, 1);
           }
         });
-        // this.$emit('removeSelected', this.selectedProducts)
         this.$emit('removeSelected', {
           list: this.selectedProducts,
           type: this.includesType
