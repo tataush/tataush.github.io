@@ -7,7 +7,7 @@
             <b-form-input v-model="searchProduct" type="text" placeholder="Enter name or SKU"></b-form-input>
           </b-form-group>
           <div class="product-list">
-            <div class="product-item" v-for="(item, index) in filteredProducts" @click="selectedProduct(item)">{{item.name}} ({{item.sku}})</div>
+            <div class="product-item" v-for="(item, index) in filteredProducts" @click="selectedProduct(item)" :key="index">{{item.name}} ({{item.sku}})</div>
           </div>
         </div>
       </b-col>
@@ -17,7 +17,7 @@
             <b-form-input v-model="searchInSelected" type="text" placeholder="Enter name or SKU"></b-form-input>
           </b-form-group>
           <div class="product-list">
-            <div class="product-item" v-for="(item, index) in filteredSelectetProducts" @click="removeProduct(item)">{{item.name}} ({{item.sku}})</div>
+            <div class="product-item" v-for="(item, index) in filteredSelectetProducts" @click="removeProduct(item)" :key="index">{{item.name}} ({{item.sku}})</div>
           </div>
         </div>
       </b-col>

@@ -1,9 +1,6 @@
-# TEST WORK
+# test
 
 ## Project setup
-```
-cd src
-```
 ```
 npm install
 ```
