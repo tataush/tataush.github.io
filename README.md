@@ -2,6 +2,9 @@
 
 ## Project setup
 ```
+cd src
+```
+```
 npm install
 ```
 
