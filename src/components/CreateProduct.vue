@@ -1,5 +1,6 @@
 <template>
 <div class="create-product">
+  {{userSelected}}
 	<div class="create-product-from">
     <b-form @submit.prevent="createProduct">
       <b-row>
@@ -71,6 +72,9 @@
           filteredProducts: [],
           includesList: [],
           passList: [],
+          selectedProductsInclude: [],
+          selectedProductsPass: [],
+          userSelected: []
 			}
 		},
     mounted() {
@@ -98,6 +102,7 @@
       filterProducts(data) {
         if (data.type == "Include") {
           this.includesList = []
+          this.selectedProductsInclude = data.list;
           data.list.forEach((item) => {
             this.includesList.push({
               type: "INCLUDE",
@@ -107,7 +112,8 @@
             })
           })
         } else {
-          this.passList = []
+          this.passList = [];
+          this.selectedProductsPass = data.list;
           data.list.forEach((item) => {
             this.passList.push({
               type: "PASS",
@@ -117,7 +123,8 @@
             })
           })
         }
-        data.list.forEach((ListItem) => {
+        this.userSelected = this.selectedProductsInclude.concat(this.selectedProductsPass);
+         this.userSelected.forEach((ListItem) => {
           this.filteredProducts.forEach((item, index) => {
             if (item == ListItem) {
               this.filteredProducts.splice(index, 1);
