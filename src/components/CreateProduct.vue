@@ -1,6 +1,5 @@
 <template>
 <div class="create-product">
-  {{userSelected}}
 	<div class="create-product-from">
     <b-form @submit.prevent="createProduct">
       <b-row>
