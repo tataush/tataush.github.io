@@ -57,7 +57,7 @@ body {
 	font-size: 32px;
 	color: #fff;
 	transition: 0.3s;
-	opacity: 0.5;
+	opacity: 0;
 }
 .catalog_item:hover::after {
 	opacity: 1;
@@ -113,4 +113,55 @@ button:active {
 
 .banner_item img {
 	max-height: 100%;
+}
+.single-banner {
+	margin: 20px 0;
+	position: relative;
+	cursor: pointer;
+}
+.single-banner img {
+	max-width: 100%;
+	width: 100%;
+}
+
+.single-banner a::before {
+	content: '';
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: #000;
+	opacity: 0;
+	transition: 0.5s;
+}
+.single-banner a:after {
+	content: "\f061";
+	font-family: "FontAwesome";
+	position: absolute;
+	text-align: center;
+	right: 50px;
+	bottom: 15px;
+	font-size: 32px;
+	color: #fff;
+	transition: 0.3s;
+	opacity: 0;
+}
+.single-banner a:hover::after {
+	opacity: 1;
+	right: 20px;
+	bottom: 15px;
+
+}
+
+.single-banner a:hover::before {
+	opacity: 0.5;
+}
+
+.main-title {
+	text-align: center;
+	font-size: 32px;
+	text-transform: uppercase;
+	margin: 15px 0;
 }
