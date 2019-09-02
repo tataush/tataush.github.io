@@ -122,6 +122,7 @@ button:active {
 .single-banner img {
 	max-width: 100%;
 	width: 100%;
+	display: block;
 }
 
 .single-banner a::before {
