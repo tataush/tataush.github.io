@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	$('.owl-carousel').owlCarousel({
+	$('.banners').owlCarousel({
 		nav: true,
 		slideSpeed: 500,
 		paginationSpeed : 500,
@@ -9,7 +9,16 @@ $(document).ready(function(){
 		autoplay: true,
 		autoplayHoverPause: true
 	});
-
+	$('.single-slider').owlCarousel({
+		nav: true,
+		slideSpeed: 500,
+		paginationSpeed : 500,
+		singleItem: true,
+		items: 1,
+		loop: true,
+		autoplay: true,
+		autoplayHoverPause: true
+	});
   	$('.search-button').on('click', function(e) {
 		var parent = $(this).closest('.search-block');
 		if (!parent.hasClass('active')) {
