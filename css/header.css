@@ -12,7 +12,9 @@ header {
 }
 
 .header_logo {
-	min-width: 180px;
+	min-width: 80px;
+	position: relative;
+	z-index: 10;
 }
 
 .header_nav {
@@ -27,6 +29,8 @@ header {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+	position: relative;
+	z-index: 10;
 }
 
 .shop-card {
@@ -139,4 +143,42 @@ header {
 	opacity: 1;
 	transition: all 0.3s;
 	text-shadow: 10px 0 #903e3f, -10px 0 #903e3f;
+}
+
+.mobile-nav {
+	display: none;
+	font-size: 22px;
+	font-weight: 100;
+	margin-right: 15px;
+	position: relative;
+	z-index: 10;
+}
+
+@media screen and (max-width: 767px) {
+	.mobile-nav {
+		display: block;
+		cursor: pointer;
+	}
+	.header_actions {
+		width: 100%;
+	}
+	.header_nav {
+		position: fixed;
+		left: -250px;
+		top: 0;
+		padding-top: 80px;
+		background: #fff;
+		bottom: 0;
+		text-align: left;
+		width: 250px;
+		z-index: 9;
+		transition: left .2s;
+	}
+	.header_nav.active {
+		left: 0px;
+	}
+	.main-navigation_item {
+		display: block;
+		margin-bottom: 15px;
+	}
 }

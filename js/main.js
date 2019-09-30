@@ -44,4 +44,7 @@ $(document).ready(function(){
 			$('.search-block input').val('');
 		}
 	});
+	$('.mobile-nav').on('click', function(){
+		$('.header_nav').toggleClass('active');
+	})
 });
