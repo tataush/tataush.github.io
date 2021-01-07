@@ -37,10 +37,10 @@ export default {
   },
   methods: {
     edit() {
-      this.$emit('edit')
+      this.$emit('edit');
     },
     remove() {
-      this.$emit('remove')
+      this.$emit('remove');
     }
   }
 }
