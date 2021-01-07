@@ -32,7 +32,7 @@
     <v-dialog v-model="editDialog" persistent max-width="390">
       <v-card>
         <v-card-title class="headline">
-          {{ editableItemIndex ? 'Edit' : 'Add' }} Item
+          {{ editableItemIndex != undefined  ? 'Edit' : 'Add' }} Item
         </v-card-title>
         <v-form
           lazy-validation
@@ -108,7 +108,7 @@
       getItemsList() {
         const listData = JSON.parse(localStorage.getItem('list'))
         if (!listData || !listData.length) {
-          for (let i = 0; i < 102; i++) {
+          for (let i = 0; i < 100; i++) {
             this.list.push(this.randomString(10));
           }
         } else {

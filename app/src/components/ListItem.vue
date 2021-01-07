@@ -1,9 +1,9 @@
 <template>
     <div class="list-item">
-      <v-card style="width: 100%">
+      <v-card class="list-item-card">
         <div class="list-item-content">
           <div
-            style="width: 100%;"
+            class="list-item_title"
             @dblclick="edit"
           >
             {{ item }}
@@ -55,10 +55,22 @@ export default {
   cursor: move;
 }
 
+.list-item-card {
+  width: 100%;
+}
+
 .list-item-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+}
+
+.list-item_title {
+  width: 100%;
+  max-width: 90%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 </style>
