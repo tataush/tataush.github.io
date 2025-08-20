@@ -40,7 +40,7 @@
                 </thead>
                 <tbody>
                     <tr v-for="(s, i) in sales" :key="i">
-                        <td style="width: 200px;">{{ new Date(s.date).toLocaleString() }}</td>
+                        <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
                         <td>{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
                         <td>{{ s.price }}</td>
@@ -53,38 +53,54 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-const sales = ref(JSON.parse(localStorage.getItem("sales") || "[]"));
-function calcStats(period) {
-    const now = new Date();
-    let from = null;
+import { ref, computed, onMounted } from 'vue'
+import { db } from '@/firebase' // импорт твоей конфигурации firebase.js
+import { collection, getDocs } from "firebase/firestore"
 
-    if (period === "today") {
-        from = new Date();
-        from.setHours(0,0,0,0);
-    } else if (period === "week") {
-        from = new Date();
-        from.setDate(now.getDate() - 7);
-    } else if (period === "month") {
-        from = new Date(now.getFullYear(), now.getMonth(), 1);
-    }
+const sales = ref([])
 
-    const filtered = sales.value.filter(s => {
-        const d = new Date(s.date);
-        return from ? d >= from : true;
-    });
-
-    const revenue = filtered.reduce((acc, s) => acc + s.sum, 0);
-    const cost = filtered.reduce((acc, s) => acc + s.cost * s.qty , 0);
-    const profit = revenue - cost;
-
-    return { revenue, cost, profit };
+// Загружаем все продажи
+async function loadSales() {
+  const snapshot = await getDocs(collection(db, "sales"))
+  sales.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 }
 
-const todayStats = computed(() => calcStats("today"));
-const weekStats = computed(() => calcStats("week"));
-const monthStats = computed(() => calcStats("month"));
+// Универсальная функция для подсчета статистики
+function calcStats(period) {
+  const now = new Date();
+  let from = null;
 
+  if (period === "today") {
+    from = new Date();
+    from.setHours(0,0,0,0);
+  } else if (period === "week") {
+    from = new Date();
+    from.setDate(now.getDate() - 7);
+  } else if (period === "month") {
+    from = new Date(now.getFullYear(), now.getMonth(), 1);
+  }
+
+  const filtered = sales.value.filter(s => {
+    const d = new Date(s.date * 1000);
+    return from ? d >= from : true;
+  });
+
+  const revenue = filtered.reduce((acc, s) => acc + Number(s.sum), 0);
+  const cost = filtered.reduce((acc, s) => acc + Number(s.cost) * Number(s.qty), 0);
+  const profit = revenue - cost;
+
+  return { revenue, cost, profit };
+}
+
+// computed свойства для статистики
+const todayStats = computed(() => calcStats("today"))
+const weekStats = computed(() => calcStats("week"))
+const monthStats = computed(() => calcStats("month"))
+
+// Загружаем при старте
+onMounted(() => {
+  loadSales()
+})
 </script>
 
 <style>

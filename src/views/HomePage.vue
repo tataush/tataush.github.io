@@ -19,7 +19,7 @@
                             <th>Ціна</th>
                         </tr>
                     </thead>
-                    <tbody v-if="filteredProducts.length">
+                    <tbody v-if="filteredProducts?.length">
                         <tr class="pointer" v-for="p in filteredProducts" :key="p.name" @click="chooseProduct(p)">
                             <td>{{ p.name}}</td>
                             <td>{{ p.qty }}</td>
@@ -44,7 +44,7 @@
             </div>
         </div>
 
-        <div class="new-sale" v-if="cart.length">
+        <div class="new-sale" v-if="cart?.length">
             <div class="cart">
                 <h3>🛒 Кошик</h3>
                 <table>
@@ -88,9 +88,9 @@
                         <th>Сума</th>
                     </tr>
                 </thead>
-                <tbody v-if="todaySales.length">
-                    <tr v-for="(s, i) in todaySales" :key="i">
-                        <td style="width: 200px;">{{ new Date(s.date).toLocaleString() }}</td>
+                <tbody v-if="sales?.length">
+                    <tr v-for="(s, i) in sales" :key="i">
+                        <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
                         <td>{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
                         <td>{{ s.price?.toFixed(2) }}</td>
@@ -117,153 +117,166 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-const products = ref(JSON.parse(localStorage.getItem("products") || "[]"));
-const filteredProducts = computed(() =>
-    products.value.filter(p => p.name.toLowerCase().includes(saleSearch.value.toLowerCase()) )
-);
+import { ref, computed, onMounted } from "vue";
+import { db } from "@/firebase";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  updateDoc,
+  doc,
+  serverTimestamp,
+} from "firebase/firestore";
 
-    
-// ---------------- ПРОДАЖИ ----------------
-const sales = ref(JSON.parse(localStorage.getItem("sales") || "[]"));
-
+// ---------------- ПРОДУКТЫ ----------------
+const products = ref([]);
+const sales = ref([]);
 const showSaleForm = ref(false);
 const saleSearch = ref("");
 const saleQty = ref(1);
+const selectedProduct = ref(null);
+const selectedQty = ref(1);
+const cart = ref([]);
 
+// загрузка данных
+const loadProducts = async () => {
+  const querySnapshot = await getDocs(collection(db, "products"));
+  products.value = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+};
 
+const loadSales = async () => {
+  const querySnapshot = await getDocs(collection(db, "sales"));
+  sales.value = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+};
 
+// computed фильтр
+const filteredProducts = computed(() =>
+  products.value.filter((p) =>
+    p.name.toLowerCase().includes(saleSearch.value.toLowerCase())
+  )
+);
+
+// ---------------- ПРОДАЖИ ----------------
 const startSale = () => {
-    showSaleForm.value = true;
-    saleSearch.value = "";
-    saleQty.value = 1;
-    selectedProduct.value = null;
+  showSaleForm.value = true;
+  saleSearch.value = "";
+  saleQty.value = 1;
+  selectedProduct.value = null;
 };
 
 const closeSale = () => {
-    showSaleForm.value = false;
-    saleSearch.value = "";
-    saleQty.value = 1;
-    selectedProduct.value = null;
-    cart.value = []
-}
+  showSaleForm.value = false;
+  saleSearch.value = "";
+  saleQty.value = 1;
+  selectedProduct.value = null;
+  cart.value = [];
+};
 
 const chooseProduct = (p) => {
-    selectedProduct.value = p;
-    saleSearch.value = p.name;
+  selectedProduct.value = p;
+  saleSearch.value = p.name;
 };
-
-const saveToStorage = () => {
-    localStorage.setItem("products", JSON.stringify(products.value));
-    localStorage.setItem("sales", JSON.stringify(sales.value));
-};
-
-const todaySales = computed(() => {
-    let today = new Date() // формат YYYY-MM-DD
-    today.setHours(0,0,0,0);
-    return sales.value.filter(s => {
-        const d = new Date(s.date);
-        return today ? d >= today : true;
-    });
-})
-
-function calcStats(period) {
-    const now = new Date();
-    let from = null;
-
-    if (period === "today") {
-        from = new Date();
-        from.setHours(0,0,0,0);
-    } else if (period === "week") {
-        from = new Date();
-        from.setDate(now.getDate() - 7);
-    } else if (period === "month") {
-        from = new Date(now.getFullYear(), now.getMonth(), 1);
-    }
-
-    const filtered = sales.value.filter(s => {
-        const d = new Date(s.date);
-        return from ? d >= from : true;
-    });
-
-    const revenue = filtered.reduce((acc, s) => acc + s.sum, 0);
-    const cost = filtered.reduce((acc, s) => acc + s.cost * s.qty , 0);
-    const profit = revenue - cost;
-
-    return { revenue, cost, profit };
-}
-
-const todayStats = computed(() => calcStats("today"));
 
 // корзина
-const cart = ref([]);
-const selectedProduct = ref(null);
-const selectedQty = ref(1);
 const cartTotal = computed(() =>
   cart.value.reduce((sum, item) => {
     return sum + Number(item.product.sellPrice) * Number(item.qty);
   }, 0)
 );
 
-
-// добавить товар в корзину
 const addToCart = () => {
-    if (!selectedProduct.value || selectedQty.value <= 0) return;
-    if (selectedProduct.value.qty < selectedQty.value) {
+  if (!selectedProduct.value || selectedQty.value <= 0) return;
+  if (selectedProduct.value.qty < selectedQty.value) {
     alert("Недостаточно товара на складе!");
     return;
-    }
-    const existing = cart.value.find(c => c.product.name === selectedProduct.value.name);
-    if (existing) {
+  }
+  const existing = cart.value.find(
+    (c) => c.product.id === selectedProduct.value.id
+  );
+  if (existing) {
     existing.qty += Number(selectedQty.value);
-    } else {
+  } else {
     cart.value.push({
-        product: selectedProduct.value,
-        qty: Number(selectedQty.value),
+      product: selectedProduct.value,
+      qty: Number(selectedQty.value),
     });
-    }
-    selectedProduct.value = null;
-    selectedQty.value = 1;
-    saleSearch.value = ''
+  }
+  selectedProduct.value = null;
+  selectedQty.value = 1;
+  saleSearch.value = "";
 };
 
-// удалить из корзины
 const removeFromCart = (item) => {
-    cart.value = cart.value.filter(c => c !== item);
+  cart.value = cart.value.filter((c) => c !== item);
 };
 
-        // оформить заказ
-const checkout = () => {
-    if (!cart.value.length) return;
+// оформить заказ
+const checkout = async () => {
+  if (!cart.value.length) return;
+//   const orderDate = new Date();
 
-        const orderDate = new Date().toISOString();
+  for (const item of cart.value) {
+    if (item.product.qty < item.qty) {
+      alert("Недостаточно товара: " + item.product.name);
+      continue;
+    }
 
-        cart.value.forEach(item => {
-        if (item.product.qty < item.qty) {
-            alert("Недостаточно товара: " + item.product.name);
-            return;
-        }
-
-        const product = products.value.find(p => p.name === item.product.name);
-        if (product && product.qty >= saleQty.value) {
-            product.qty -= item.qty;
-        }
-       
-
-        sales.value.push({
-            name: item.product.name,
-            qty: item.qty,
-            price: item.product.sellPrice,
-            date: orderDate,
-            cost: item.product.buyPrice,
-            sum: item.qty * item.product.sellPrice,
-        });
+    // уменьшаем количество товара
+    const productRef = doc(db, "products", item.product.id);
+    await updateDoc(productRef, {
+      qty: item.product.qty - item.qty,
     });
 
-    cart.value = [];
-    saveToStorage();
+    // добавляем продажу
+    await addDoc(collection(db, "sales"), {
+      name: item.product.name,
+      qty: item.qty,
+      price: item.product.sellPrice,
+      cost: item.product.buyPrice,
+      sum: item.qty * item.product.sellPrice,
+      date: serverTimestamp(),
+    });
+  }
+
+  cart.value = [];
+  await loadProducts();
+  await loadSales();
 };
 
+// ---------------- СТАТИСТИКА ----------------
+function calcStats(period) {
+  const now = new Date();
+  let from = null;
+
+  if (period === "today") {
+    from = new Date();
+    from.setHours(0, 0, 0, 0);
+  } else if (period === "week") {
+    from = new Date();
+    from.setDate(now.getDate() - 7);
+  } else if (period === "month") {
+    from = new Date(now.getFullYear(), now.getMonth(), 1);
+  }
+
+  const filtered = sales.value.filter((s) => {
+    const d = s.date?.toDate ? s.date.toDate() : new Date(s.date * 1000);
+    return from ? d >= from : true;
+  });
+
+  const revenue = filtered.reduce((acc, s) => acc + s.sum, 0);
+  const cost = filtered.reduce((acc, s) => acc + s.cost * s.qty, 0);
+  const profit = revenue - cost;
+
+  return { revenue, cost, profit };
+}
+
+const todayStats = computed(() => calcStats("today"));
+
+// ---------------- INIT ----------------
+onMounted(async () => {
+  await loadProducts();
+  await loadSales();
+});
 </script>
 
 <style>

@@ -68,59 +68,75 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
-const products = ref(JSON.parse(localStorage.getItem("products") || "[]"));
-const productSearch = ref("");
-const editProduct = reactive({ name: "", qty: 0, buyPrice: 0, sellPrice: 0 });
+import { ref, reactive, computed, onMounted } from "vue"
+import { db } from "@/firebase"
+import { collection, addDoc, getDocs, updateDoc, doc } from "firebase/firestore"
 
-const editingIndex = ref(null);
+const products = ref([])
+const productSearch = ref("")
+const editProduct = reactive({ name: "", qty: 0, buyPrice: 0, sellPrice: 0 })
+const editingIndex = ref(null)
+
+const productsCollection = collection(db, "products")
+
+// 📥 Загружаем из Firestore при старте
+onMounted(async () => {
+  const snapshot = await getDocs(productsCollection)
+  products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  console.log(products.value)
+})
 
 const filteredProducts = computed(() =>
-    products.value.filter(p => p.name.toLowerCase().includes(productSearch.value.toLowerCase()) )
-);
+  products.value.filter(p => p.name?.toLowerCase().includes(productSearch.value?.toLowerCase()))
+)
 
 function calcMarkup(product) {
-  if (!product.buyPrice || product.buyPrice <= 0) return 0;
-  return ((product.sellPrice - product.buyPrice) / product.buyPrice) * 100;
+  if (!product.buyPrice || product.buyPrice <= 0) return 0
+  return ((product.sellPrice - product.buyPrice) / product.buyPrice) * 100
 }
 
 const newProduct = reactive({
-    name: "",
-    qty: 0,
-    buyPrice: 0,
-    sellPrice: 0,
-});
+  name: "",
+  qty: 0,
+  buyPrice: 0,
+  sellPrice: 0,
+})
 
 const startEdit = (index, product) => {
-    editingIndex.value = index;
-    Object.assign(editProduct, product);
-};
+  editingIndex.value = index
+  Object.assign(editProduct, product)
+}
 
+const saveEdit = async () => {
+  const product = products.value[editingIndex.value]
+  const productRef = doc(db, "products", product.id)
+  await updateDoc(productRef, { ...editProduct })
 
-const saveEdit = () => {
-    products.value[editingIndex.value] = { ...editProduct };
-    saveToStorage();
-    editingIndex.value = null;
-};
+  products.value[editingIndex.value] = { ...editProduct, id: product.id }
+  editingIndex.value = null
+}
 
-const addProduct = () => {
-    if (!newProduct.name) return;
-    products.value.push({
-        name: newProduct.name,
-        qty: Number(newProduct.qty),
-        buyPrice: Number(newProduct.buyPrice),
-        sellPrice: Number(newProduct.sellPrice),
-    });
-    saveToStorage();
-    newProduct.name = "";
-    newProduct.qty = 0;
-    newProduct.buyPrice = 0;
-    newProduct.sellPrice = 0;
-};
+const addProduct = async () => {
+  if (!newProduct.name) return
+  const docRef = await addDoc(productsCollection, {
+    name: newProduct.name,
+    qty: Number(newProduct.qty),
+    buyPrice: Number(newProduct.buyPrice),
+    sellPrice: Number(newProduct.sellPrice),
+  })
 
+  products.value.push({
+    id: docRef.id,
+    name: newProduct.name,
+    qty: Number(newProduct.qty),
+    buyPrice: Number(newProduct.buyPrice),
+    sellPrice: Number(newProduct.sellPrice),
+  })
 
-const saveToStorage = () => {
-    localStorage.setItem("products", JSON.stringify(products.value));
+  newProduct.name = ""
+  newProduct.qty = 0
+  newProduct.buyPrice = 0
+  newProduct.sellPrice = 0
 }
 </script>
 
