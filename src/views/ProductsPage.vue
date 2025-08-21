@@ -66,7 +66,7 @@
         </table>
         <div class="prices-and-estimates">
             <p>Сума закупівлі: <b>{{ productsStats.totalBuy?.toFixed(2) }}</b></p>
-            <p>Сумма продажу: <b>{{ productsStats.totalSell?.toFixed(2) }}</b></p>
+            <p>Сума продажу: <b>{{ productsStats.totalSell?.toFixed(2) }}</b></p>
             <p>Очікуваний прибуток: <b>{{ productsStats.profit?.toFixed(2) }}</b></p>
         </div>
     </div>
@@ -129,12 +129,6 @@ const saveEdit = async () => {
     qty: editProduct.qty,
     buyPrice: editProduct.buyPrice,
     sellPrice: editProduct.sellPrice,
-  })
-
-  // Обновляем существующий продукт в массиве (замена по индексу)
-  products.value.splice(editingIndex.value, 1, { 
-    ...editProduct, 
-    id: product.id 
   })
 
   editingIndex.value = null
