@@ -75,7 +75,7 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue"
 import { db } from "@/firebase"
-import { collection, addDoc, getDocs, updateDoc, doc } from "firebase/firestore"
+import { collection, addDoc, getDocs, updateDoc, doc, onSnapshot } from "firebase/firestore"
 
 const products = ref([])
 const productSearch = ref("")
@@ -84,12 +84,13 @@ const editingIndex = ref(null)
 
 const productsCollection = collection(db, "products")
 
-// 📥 Загружаем из Firestore при старте
-onMounted(async () => {
-  const snapshot = await getDocs(productsCollection)
-  products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-  console.log(products.value)
+// 🔥 Реактивная подписка вместо getDocs
+onMounted(() => {
+  onSnapshot(productsCollection, snapshot => {
+    products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  })
 })
+
 
 const filteredProducts = computed(() =>
   products.value.filter(p => p.name?.toLowerCase().includes(productSearch.value?.toLowerCase()))
@@ -122,35 +123,42 @@ const startEdit = (index, product) => {
 
 const saveEdit = async () => {
   const product = products.value[editingIndex.value]
-  const productRef = doc(db, "products", product.id)
 
-  await updateDoc(productRef, {
+  if (!product?.id) {
+    console.error("❌ Нет id у продукта, не могу обновить:", product)
+    return
+  }
+
+  const productRef = doc(db, "products", product.id)
+  await updateDoc(productRef, { 
     name: editProduct.name,
-    qty: editProduct.qty,
-    buyPrice: editProduct.buyPrice,
-    sellPrice: editProduct.sellPrice,
+    qty: Number(editProduct.qty),
+    buyPrice: Number(editProduct.buyPrice),
+    sellPrice: Number(editProduct.sellPrice)
   })
+
+  // перезагружаем список из Firestore
+  const snapshot = await getDocs(productsCollection)
+  products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 
   editingIndex.value = null
 }
 
 const addProduct = async () => {
   if (!newProduct.name) return
-  const docRef = await addDoc(productsCollection, {
+
+  await addDoc(productsCollection, {
     name: newProduct.name,
     qty: Number(newProduct.qty),
     buyPrice: Number(newProduct.buyPrice),
     sellPrice: Number(newProduct.sellPrice),
   })
 
-  products.value.push({
-    id: docRef.id,
-    name: newProduct.name,
-    qty: Number(newProduct.qty),
-    buyPrice: Number(newProduct.buyPrice),
-    sellPrice: Number(newProduct.sellPrice),
-  })
+  // 🔄 После добавления перегружаем список из Firestore
+  const snapshot = await getDocs(productsCollection)
+  products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 
+  // очистка формы
   newProduct.name = ""
   newProduct.qty = 0
   newProduct.buyPrice = 0
