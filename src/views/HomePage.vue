@@ -227,24 +227,24 @@ const checkout = async () => {
         // уменьшаем количество товара
         const productRef = doc(db, "products", item.product.id);
         await updateDoc(productRef, {
-        qty: item.product.qty - item.qty,
+            qty: item.product.qty - item.qty,
         });
 
         // добавляем продажу
         await addDoc(collection(db, "sales"), {
-        name: item.product.name,
-        qty: item.qty,
-        price: item.product.sellPrice,
-        cost: item.product.buyPrice,
-        sum: item.qty * item.product.sellPrice,
-        date: serverTimestamp(),
+            name: item.product.name,
+            qty: item.qty,
+            price: item.product.sellPrice,
+            cost: item.product.buyPrice,
+            sum: item.qty * item.product.sellPrice,
+            date: serverTimestamp(),
         });
     }
 
     cart.value = [];
     await loadProducts();
     await loadSales();
-     toast.success("🚀 Чудова робота!")
+    toast.success("🚀 Чудова робота!")
   } catch {
     toast.error("Виникла помилка")
   }

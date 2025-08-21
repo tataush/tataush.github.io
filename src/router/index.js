@@ -3,7 +3,7 @@ import HomePage from '../views/HomePage.vue'
 import HistoryPage from '../views/HistoryPage.vue'
 import Products from '../views/ProductsPage.vue'
 import WriteOffs from '../views/WriteOffs.vue'
-
+import SecondHand from '@/views/SecondHandPage.vue'
 const routes = [
   {
     path: '/',
@@ -24,6 +24,11 @@ const routes = [
     path: '/write-offs',
     name: 'WriteOffs',
     component: WriteOffs,
+  },
+  {
+    path: '/second',
+    name: 'SecondHand',
+    component: SecondHand,
   },
 ]
 

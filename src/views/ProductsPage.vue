@@ -255,8 +255,9 @@ async function writeOffProduct(product, qty, reason = "Не вказали") {
     })
 
     showWriteOff.value = false
+    writeOffQty.value = 1;
 
-        // перезагружаем список из Firestore
+    // перезагружаем список из Firestore
     const snapshot = await getDocs(productsCollection)
     products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
     toast.success("Товар списано успешно!")

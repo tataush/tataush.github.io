@@ -77,7 +77,8 @@ input {
   border: 2px solid #000;
   border-radius: 6px;
   padding: 0 10px;
-  height: 32px;
+  height: 36px;
+  box-sizing: border-box;
 }
 
 select {
