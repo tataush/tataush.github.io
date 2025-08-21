@@ -21,7 +21,7 @@
                     </thead>
                     <tbody v-if="filteredProducts?.length">
                         <tr class="pointer" v-for="p in filteredProducts" :key="p.name" @click="chooseProduct(p)">
-                            <td>{{ p.name}}</td>
+                            <td class="text-capitalize">{{ p.name}}</td>
                             <td>{{ p.qty }}</td>
                             <td>{{ p.sellPrice?.toFixed(2) }}</td>
                         </tr>
@@ -59,7 +59,7 @@
                     </thead>
                     <tbody>
                         <tr v-for="(item, i) in cart" :key="i">
-                            <td>{{ item.product.name }}</td>
+                            <td class="text-capitalize">{{ item.product.name }}</td>
                             <td>{{ item.qty }}</td>
                             <td>{{ item.product.sellPrice?.toFixed(2) }}</td>
                             <td>{{ item.qty * item.product.sellPrice ?.toFixed(2)}}</td>
@@ -91,7 +91,7 @@
                 <tbody v-if="sales?.length">
                     <tr v-for="(s, i) in sales" :key="i">
                         <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
-                        <td>{{ s.name }}</td>
+                        <td class="text-capitalize">{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
                         <td>{{ s.price?.toFixed(2) }}</td>
                         <td>{{ s.sum?.toFixed(2)}}</td>
@@ -128,6 +128,9 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 
+import { useToast } from "vue-toastification"
+
+const toast = useToast()
 // ---------------- ПРОДУКТЫ ----------------
 const products = ref([]);
 const sales = ref([]);
@@ -212,35 +215,39 @@ const removeFromCart = (item) => {
 
 // оформить заказ
 const checkout = async () => {
-  if (!cart.value.length) return;
-//   const orderDate = new Date();
+  try {
+    if (!cart.value.length) return;
 
-  for (const item of cart.value) {
-    if (item.product.qty < item.qty) {
-      alert("Недостаточно товара: " + item.product.name);
-      continue;
+    for (const item of cart.value) {
+        if (item.product.qty < item.qty) {
+        alert("Недостаточно товара: " + item.product.name);
+        continue;
     }
 
-    // уменьшаем количество товара
-    const productRef = doc(db, "products", item.product.id);
-    await updateDoc(productRef, {
-      qty: item.product.qty - item.qty,
-    });
+        // уменьшаем количество товара
+        const productRef = doc(db, "products", item.product.id);
+        await updateDoc(productRef, {
+        qty: item.product.qty - item.qty,
+        });
 
-    // добавляем продажу
-    await addDoc(collection(db, "sales"), {
-      name: item.product.name,
-      qty: item.qty,
-      price: item.product.sellPrice,
-      cost: item.product.buyPrice,
-      sum: item.qty * item.product.sellPrice,
-      date: serverTimestamp(),
-    });
+        // добавляем продажу
+        await addDoc(collection(db, "sales"), {
+        name: item.product.name,
+        qty: item.qty,
+        price: item.product.sellPrice,
+        cost: item.product.buyPrice,
+        sum: item.qty * item.product.sellPrice,
+        date: serverTimestamp(),
+        });
+    }
+
+    cart.value = [];
+    await loadProducts();
+    await loadSales();
+     toast.success("🚀 Чудова робота!")
+  } catch {
+    toast.error("Виникла помилка")
   }
-
-  cart.value = [];
-  await loadProducts();
-  await loadSales();
 };
 
 // ---------------- СТАТИСТИКА ----------------

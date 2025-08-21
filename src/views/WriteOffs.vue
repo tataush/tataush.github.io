@@ -13,7 +13,7 @@
             <tbody>
                 <tr v-for="(s, i) in writeOffs" :key="i">
                     <td style="width: 200px;">{{ new Date(s.date).toLocaleString() }}</td>
-                    <td>{{ s.name }}</td>
+                    <td class="text-capitalize">{{ s.name }}</td>
                     <td>{{ s.qty }}</td>
                     <td>{{ s.reason }}</td>
                 </tr>

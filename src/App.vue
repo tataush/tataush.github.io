@@ -34,6 +34,7 @@ body {
 .layout {
   max-width: 1200px;
   min-height: 100vh;
+  min-width: 920px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
@@ -111,6 +112,10 @@ select {
 .btn.btn-red {
   background-color: #C21807;
   border: 1px solid #C21807;
+}
+
+.text-capitalize {
+  text-transform: capitalize;
 }
 
 </style>

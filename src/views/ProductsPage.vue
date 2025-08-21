@@ -42,7 +42,7 @@
           </thead>
           <tbody v-if="filteredProducts.length">
             <tr :class="[{'is-finished': p.qty === 0 }]" v-for="(p, index) in filteredProducts" :key="index">
-                <td v-if="editingId !== p.id">{{ p.name }}</td>
+                <td v-if="editingId !== p.id" class="text-capitalize">{{ p.name }}</td>
                 <td v-else><input v-model="editProduct.name"></td>
 
                 <td v-if="editingId !== p.id">{{ p.qty || 0 }}</td>
@@ -55,7 +55,7 @@
                 <td v-else><input type="number" v-model="editProduct.sellPrice"></td>
 
                 <td>
-                  <div style="display: flex; gap: 8px;">
+                  <div style="display: flex; gap: 8px; justify-content: flex-end;">
                     <button v-if="editingId !== p.id" @click="startEdit(p)" class="btn">✏️</button>
                     <button v-else @click="saveEdit" class="btn">💾</button>
                     <button @click="openWriteOff(p)" class="btn">✂️</button>
@@ -79,7 +79,7 @@
         <div v-if="showWriteOff" class="modal-overlay">
             <div class="modal">
                 <h2>Списання товару</h2>
-                <h2>{{ selectedProduct.name}}</h2>
+                <h2 class="text-capitalize">{{ selectedProduct.name}}</h2>
                 <div class="write-off-form">
                     <div class="write-off-form-item">
                         <label>Кількість:</label>
@@ -99,8 +99,8 @@
                 </div>
 
                 <div class="modal-actions">
-                    <button @click="closeWriteOff" class="btn">Отмена</button>
-                    <button @click="confirmWriteOff" class="btn">Списать</button>
+                    <button @click="confirmWriteOff" class="btn">Списати</button>
+                    <button @click="closeWriteOff" class="btn">Відмінити</button>
                 </div>
             </div>
         </div>
@@ -111,7 +111,9 @@
 import { ref, reactive, computed, onMounted } from "vue"
 import { db } from "@/firebase"
 import { collection, addDoc, getDocs, updateDoc, doc, onSnapshot } from "firebase/firestore"
+import { useToast } from "vue-toastification"
 
+const toast = useToast()
 const products = ref([])
 const productSearch = ref("")
 const editProduct = reactive({ name: "", qty: 0, buyPrice: 0, sellPrice: 0 })
@@ -163,9 +165,9 @@ function calcMarkup(product) {
 
 const newProduct = reactive({
   name: "",
-  qty: 0,
-  buyPrice: 0,
-  sellPrice: 0,
+  qty: null,
+  buyPrice: null,
+  sellPrice: null,
 })
 
 const startEdit = (product) => {
@@ -174,78 +176,93 @@ const startEdit = (product) => {
 }
 
 const saveEdit = async () => {
-  const product = products.value.find(p => p.id === editingId.value)
+  try {
+    const product = products.value.find(p => p.id === editingId.value)
 
-  if (!product?.id) {
-    console.error("❌ Нет id у продукта, не могу обновить:", product)
-    return
+    if (!product?.id) {
+        console.error("❌ Нет id у продукта, не могу обновить:", product)
+        return
+    }
+    const productRef = doc(db, "products", product.id)
+    
+    await updateDoc(productRef, { 
+        name: editProduct.name,
+        qty: Number(editProduct.qty),
+        buyPrice: Number(editProduct.buyPrice),
+        sellPrice: Number(editProduct.sellPrice)
+    })
+
+    // перезагружаем список из Firestore
+    const snapshot = await getDocs(productsCollection)
+    products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+
+    editingId.value = null
+    toast.success("🚀 Товар змінено успешно!")
+  } catch (e) {
+    toast.error("Виникла помилка")
   }
-  const productRef = doc(db, "products", product.id)
-  
-  await updateDoc(productRef, { 
-    name: editProduct.name,
-    qty: Number(editProduct.qty),
-    buyPrice: Number(editProduct.buyPrice),
-    sellPrice: Number(editProduct.sellPrice)
-  })
-
-  // перезагружаем список из Firestore
-  const snapshot = await getDocs(productsCollection)
-  products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-
-  editingId.value = null
 }
 
 const addProduct = async () => {
-  if (!newProduct.name) return
+  try {
+    if (!newProduct.name) return
 
-  await addDoc(productsCollection, {
-    name: newProduct.name,
-    qty: Number(newProduct.qty),
-    buyPrice: Number(newProduct.buyPrice),
-    sellPrice: Number(newProduct.sellPrice),
-  })
+    await addDoc(productsCollection, {
+        name: newProduct.name,
+        qty: Number(newProduct.qty),
+        buyPrice: Number(newProduct.buyPrice),
+        sellPrice: Number(newProduct.sellPrice),
+    })
 
-  // 🔄 После добавления перегружаем список из Firestore
-  const snapshot = await getDocs(productsCollection)
-  products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    // 🔄 После добавления перегружаем список из Firestore
+    const snapshot = await getDocs(productsCollection)
+    products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 
-  // очистка формы
-  newProduct.name = ""
-  newProduct.qty = 0
-  newProduct.buyPrice = 0
-  newProduct.sellPrice = 0
+    // очистка формы
+    newProduct.name = ""
+    newProduct.qty = 0
+    newProduct.buyPrice = 0
+    newProduct.sellPrice = 0
+    toast.success("🚀 Товар додано успешно!")
+  } catch (e) {
+    toast.error("Виникла помилка")
+  }
 }
 
 
-async function writeOffProduct(product, qty, reason = "Списание") {
+async function writeOffProduct(product, qty, reason = "Не вказали") {
   if (qty <= 0) return
 
-  // уменьшаем остаток
-  const newQty = product.qty - qty
-  if (newQty < 0) {
-    alert("Нельзя списать больше, чем есть на складе")
-    return
+  try {
+    // уменьшаем остаток
+    const newQty = product.qty - qty
+    if (newQty < 0) {
+        toast.error("Не можна списати більше, ніж є на складі")
+        return
+    }
+
+    // обновляем товар
+    const productRef = doc(db, "products", product.id)
+    await updateDoc(productRef, { qty: newQty })
+
+    // сохраняем в историю списаний
+    await addDoc(writeOffsCollection, {
+        productId: product.id,
+        name: product.name,
+        qty,
+        reason,
+        date: new Date().toISOString()
+    })
+
+    showWriteOff.value = false
+
+        // перезагружаем список из Firestore
+    const snapshot = await getDocs(productsCollection)
+    products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    toast.success("Товар списано успешно!")
+  } catch (e) {
+    toast.error("Виникла помилка")
   }
-
-  // обновляем товар
-  const productRef = doc(db, "products", product.id)
-  await updateDoc(productRef, { qty: newQty })
-
-  // сохраняем в историю списаний
-  await addDoc(writeOffsCollection, {
-    productId: product.id,
-    name: product.name,
-    qty,
-    reason,
-    date: new Date().toISOString()
-  })
-
-  showWriteOff.value = false
-
-    // перезагружаем список из Firestore
-  const snapshot = await getDocs(productsCollection)
-  products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 }
 
 </script>

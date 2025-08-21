@@ -41,7 +41,7 @@
                 <tbody>
                     <tr v-for="(s, i) in sales" :key="i">
                         <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
-                        <td>{{ s.name }}</td>
+                        <td class="text-capitalize">{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
                         <td>{{ s.price }}</td>
                         <td>{{ s.sum }}</td>
