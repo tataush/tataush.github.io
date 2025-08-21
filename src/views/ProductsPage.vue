@@ -64,6 +64,11 @@
             </tr>
           </tbody>
         </table>
+        <div class="prices-and-estimates">
+            <p>Сума закупівлі: <b>{{ productsStats.totalBuy?.toFixed(2) }}</b></p>
+            <p>Сумма продажу: <b>{{ productsStats.totalSell?.toFixed(2) }}</b></p>
+            <p>Очікуваний прибуток: <b>{{ productsStats.profit?.toFixed(2) }}</b></p>
+        </div>
     </div>
 </template>
 
@@ -89,6 +94,14 @@ onMounted(async () => {
 const filteredProducts = computed(() =>
   products.value.filter(p => p.name?.toLowerCase().includes(productSearch.value?.toLowerCase()))
 )
+
+// computed статистика по всем товарам
+const productsStats = computed(() => {
+  const totalBuy = products.value.reduce((sum, p) => sum + (p.buyPrice * p.qty), 0)
+  const totalSell = products.value.reduce((sum, p) => sum + (p.sellPrice * p.qty), 0)
+  const profit = totalSell - totalBuy
+  return { totalBuy, totalSell, profit }
+})
 
 function calcMarkup(product) {
   if (!product.buyPrice || product.buyPrice <= 0) return 0
