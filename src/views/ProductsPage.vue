@@ -110,9 +110,20 @@ const startEdit = (index, product) => {
 const saveEdit = async () => {
   const product = products.value[editingIndex.value]
   const productRef = doc(db, "products", product.id)
-  await updateDoc(productRef, { ...editProduct })
 
-  products.value[editingIndex.value] = { ...editProduct, id: product.id }
+  await updateDoc(productRef, {
+    name: editProduct.name,
+    qty: editProduct.qty,
+    buyPrice: editProduct.buyPrice,
+    sellPrice: editProduct.sellPrice,
+  })
+
+  // Обновляем существующий продукт в массиве (замена по индексу)
+  products.value.splice(editingIndex.value, 1, { 
+    ...editProduct, 
+    id: product.id 
+  })
+
   editingIndex.value = null
 }
 
