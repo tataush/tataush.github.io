@@ -24,9 +24,11 @@
         </div>
 
         <h3>Список товарів ({{ products.length }})</h3>
+    
         <div>
             <input v-model="productSearch" placeholder="Пошук" class="search-product">
         </div>
+    
         <table>
           <thead>
             <tr>
@@ -40,20 +42,20 @@
           </thead>
           <tbody v-if="filteredProducts.length">
             <tr :class="[{'is-finished': p.qty === 0 }]" v-for="(p, index) in filteredProducts" :key="index">
-                <td v-if="editingIndex !== index">{{ p.name }}</td>
+                <td v-if="editingId !== p.id">{{ p.name }}</td>
                 <td v-else><input v-model="editProduct.name"></td>
 
-                <td v-if="editingIndex !== index">{{ p.qty || 0 }}</td>
+                <td v-if="editingId !== p.id">{{ p.qty || 0 }}</td>
                 <td v-else><input type="number" v-model="editProduct.qty"></td>
 
-                <td v-if="editingIndex !== index">{{ p.buyPrice.toFixed(2)}}</td>
+                <td v-if="editingId !== p.id">{{ p.buyPrice.toFixed(2)}}</td>
                 <td v-else><input type="number" v-model="editProduct.buyPrice"></td>
                 <td>{{ calcMarkup(p) ?  calcMarkup(p).toFixed(2) : calcMarkup(p)}}%</td>
-                <td v-if="editingIndex !== index">{{ p.sellPrice?.toFixed(2) }}</td>
+                <td v-if="editingId !== p.id">{{ p.sellPrice?.toFixed(2) }}</td>
                 <td v-else><input type="number" v-model="editProduct.sellPrice"></td>
 
                 <td>
-                  <button v-if="editingIndex !== index" @click="startEdit(index, p)" class="btn">✏️ Редагувати</button>
+                  <button v-if="editingId !== p.id" @click="startEdit(p)" class="btn">✏️ Редагувати</button>
                   <button v-else @click="saveEdit" class="btn">💾 Зберігти</button>
                 </td>
             </tr>
@@ -80,7 +82,7 @@ import { collection, addDoc, getDocs, updateDoc, doc, onSnapshot } from "firebas
 const products = ref([])
 const productSearch = ref("")
 const editProduct = reactive({ name: "", qty: 0, buyPrice: 0, sellPrice: 0 })
-const editingIndex = ref(null)
+const editingId = ref(null)
 
 const productsCollection = collection(db, "products")
 
@@ -116,20 +118,20 @@ const newProduct = reactive({
   sellPrice: 0,
 })
 
-const startEdit = (index, product) => {
-  editingIndex.value = index
+const startEdit = (product) => {
+  editingId.value = product.id
   Object.assign(editProduct, product)
 }
 
 const saveEdit = async () => {
-  const product = products.value[editingIndex.value]
+  const product = products.value.find(p => p.id === editingId.value)
 
   if (!product?.id) {
     console.error("❌ Нет id у продукта, не могу обновить:", product)
     return
   }
-
   const productRef = doc(db, "products", product.id)
+  
   await updateDoc(productRef, { 
     name: editProduct.name,
     qty: Number(editProduct.qty),
@@ -141,7 +143,7 @@ const saveEdit = async () => {
   const snapshot = await getDocs(productsCollection)
   products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 
-  editingIndex.value = null
+  editingId.value = null
 }
 
 const addProduct = async () => {
