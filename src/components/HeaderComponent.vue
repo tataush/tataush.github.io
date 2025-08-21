@@ -7,7 +7,8 @@
         <div class="nav">
             <router-link to="/">Головна</router-link>
             <router-link to="/products">Товари</router-link>
-            <router-link to="/history">Історія продажу</router-link> 
+            <router-link to="/history">Історія продажу</router-link>
+            <router-link to="/write-offs">Списання</router-link>
         </div>
     </div>
 </template>

@@ -76,7 +76,14 @@ input {
   border: 2px solid #000;
   border-radius: 6px;
   padding: 0 10px;
-  height: 38px;
+  height: 32px;
+}
+
+select {
+  border: 2px solid #000;
+  border-radius: 6px;
+  padding: 0 10px;
+  height: 32px;
 }
 
 .input:focus, .input:active {
@@ -92,7 +99,7 @@ input {
     color: #fff;
     cursor: pointer;
     font-size: 16px;
-    height: 42px;;
+    height: 36px;;
 }
 
 .cart-actions {

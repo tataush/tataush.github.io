@@ -55,8 +55,11 @@
                 <td v-else><input type="number" v-model="editProduct.sellPrice"></td>
 
                 <td>
-                  <button v-if="editingId !== p.id" @click="startEdit(p)" class="btn">✏️ Редагувати</button>
-                  <button v-else @click="saveEdit" class="btn">💾 Зберігти</button>
+                  <div style="display: flex; gap: 8px;">
+                    <button v-if="editingId !== p.id" @click="startEdit(p)" class="btn">✏️</button>
+                    <button v-else @click="saveEdit" class="btn">💾</button>
+                    <button @click="openWriteOff(p)" class="btn">✂️</button>
+                  </div>
                 </td>
             </tr>
           </tbody>
@@ -71,6 +74,36 @@
             <p>Сума продажу: <b>{{ productsStats.totalSell?.toFixed(2) }}</b></p>
             <p>Очікуваний прибуток: <b>{{ productsStats.profit?.toFixed(2) }}</b></p>
         </div>
+
+    <!-- Модалка -->
+        <div v-if="showWriteOff" class="modal-overlay">
+            <div class="modal">
+                <h2>Списання товару</h2>
+                <h2>{{ selectedProduct.name}}</h2>
+                <div class="write-off-form">
+                    <div class="write-off-form-item">
+                        <label>Кількість:</label>
+                        <input type="number" v-model="writeOffQty" min="1" :max="selectedProduct?.qty" />
+                    </div>
+
+                    <div class="write-off-form-item">
+                        <label>Причина:</label>
+                        <select v-model="writeOffReason">
+                            <option value="Брак">Брак</option>
+                            <option value="Псування">Псування</option>
+                            <option value="Подарунок">Подарунок</option>
+                            <option value="Особисте використання">Особисте використання</option>
+                            <option value="Кража">Кража</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button @click="closeWriteOff" class="btn">Отмена</button>
+                    <button @click="confirmWriteOff" class="btn">Списать</button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -83,8 +116,12 @@ const products = ref([])
 const productSearch = ref("")
 const editProduct = reactive({ name: "", qty: 0, buyPrice: 0, sellPrice: 0 })
 const editingId = ref(null)
-
+const showWriteOff = ref(false)
 const productsCollection = collection(db, "products")
+const writeOffsCollection = collection(db, "writeOffs")
+const writeOffQty = ref(1)
+const selectedProduct = reactive({ name: "", qty: 0, buyPrice: 0, sellPrice: 0 })
+const writeOffReason = ref('')
 
 // 🔥 Реактивная подписка вместо getDocs
 onMounted(() => {
@@ -99,12 +136,25 @@ const filteredProducts = computed(() =>
 )
 
 // computed статистика по всем товарам
-const productsStats = computed(() => {
+  const productsStats = computed(() => {
   const totalBuy = products.value.reduce((sum, p) => sum + (p.buyPrice * p.qty), 0)
   const totalSell = products.value.reduce((sum, p) => sum + (p.sellPrice * p.qty), 0)
   const profit = totalSell - totalBuy
   return { totalBuy, totalSell, profit }
 })
+
+function openWriteOff(product) {
+    showWriteOff.value = true
+    Object.assign(selectedProduct, product)
+}
+
+function closeWriteOff() {
+    showWriteOff.value = false
+}
+
+function confirmWriteOff() {
+    writeOffProduct(selectedProduct, writeOffQty.value, writeOffReason.value)
+}
 
 function calcMarkup(product) {
   if (!product.buyPrice || product.buyPrice <= 0) return 0
@@ -166,6 +216,38 @@ const addProduct = async () => {
   newProduct.buyPrice = 0
   newProduct.sellPrice = 0
 }
+
+
+async function writeOffProduct(product, qty, reason = "Списание") {
+  if (qty <= 0) return
+
+  // уменьшаем остаток
+  const newQty = product.qty - qty
+  if (newQty < 0) {
+    alert("Нельзя списать больше, чем есть на складе")
+    return
+  }
+
+  // обновляем товар
+  const productRef = doc(db, "products", product.id)
+  await updateDoc(productRef, { qty: newQty })
+
+  // сохраняем в историю списаний
+  await addDoc(writeOffsCollection, {
+    productId: product.id,
+    name: product.name,
+    qty,
+    reason,
+    date: new Date().toISOString()
+  })
+
+  showWriteOff.value = false
+
+    // перезагружаем список из Firestore
+  const snapshot = await getDocs(productsCollection)
+  products.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+}
+
 </script>
 
 <style>
@@ -197,5 +279,67 @@ const addProduct = async () => {
 
 .add-new-product-form div:first-child input {
     width: 300px;
+}
+
+/* затемнение фона */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* сама модалка */
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 350px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal h2 {
+  margin: 0 0 15px 0;
+  font-size: 18px;
+}
+
+.modal label {
+    display: block;
+    font-size: 14px;
+}
+
+.modal input, .modal select {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.modal-actions button:first-child {
+  background: #e74c3c;
+  border-color: #e74c3c;
+  color: white;
+}
+
+
+.write-off-form {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.write-off-form-item {
+    width: 100%;
 }
 </style>
