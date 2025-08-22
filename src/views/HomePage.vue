@@ -126,6 +126,10 @@ import {
   updateDoc,
   doc,
   serverTimestamp,
+  where,
+  orderBy,
+  onSnapshot,
+  query
 } from "firebase/firestore";
 
 import { useToast } from "vue-toastification"
@@ -148,8 +152,13 @@ const loadProducts = async () => {
 };
 
 const loadSales = async () => {
-  const querySnapshot = await getDocs(collection(db, "sales"));
-  sales.value = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
+  // const start = new Date()
+  // start.setHours(0, 0, 0, 0)
+
+  // const end = new Date()
+  // end.setHours(23, 59, 59, 999)
+  // const querySnapshot = await getDocs(collection(db, "sales"),  where("date", ">=", start), where("date", "<=", end), orderBy("date", "desc"));
+  // sales.value = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 };
 
 // computed фильтр
@@ -282,7 +291,26 @@ const todayStats = computed(() => calcStats("today"));
 // ---------------- INIT ----------------
 onMounted(async () => {
   await loadProducts();
-  await loadSales();
+  // await loadSales();
+
+    // начало и конец сегодняшнего дня
+  const start = new Date()
+  start.setHours(0, 0, 0, 0)
+
+  const end = new Date()
+  end.setHours(23, 59, 59, 999)
+
+  const q = query(
+    collection(db, "sales"),
+    where("date", ">=", start),
+    where("date", "<=", end),
+    orderBy("date", "desc")
+  )
+
+  onSnapshot(q, snapshot => {
+    sales.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+  })
+
 });
 </script>
 

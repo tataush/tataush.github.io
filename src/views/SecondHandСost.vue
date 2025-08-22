@@ -1,21 +1,17 @@
 <template>
     <div>
-        <div class="second-hand-header">
-            <h2>Second Hand</h2>
-            <router-link to="/second/cost">Закупівля</router-link>
-        </div>
         <div class="new-sale-btn">
-          <button @click="startSale" :class="['btn', {'hide-me': showSaleForm}]">+ Новий продаж</button>
+          <button @click="startSale" :class="['btn', {'hide-me': showSaleForm}]">+ Додати закупівлю</button>
         </div>
         <div class="new-sale-form" v-if="showSaleForm">
             <div class="new-sale-form-row">
                 <div class="new-sale-form-item">
                     <label>Назва</label>
-                    <input type="text" placeholder="Назва: блузка" v-model="itemName">
+                    <input type="text" placeholder="Назва: інтернет замовлення" v-model="itemName">
                 </div>
                 <div class="new-sale-form-item">
                     <label>Ціна</label>
-                    <input type="number" placeholder="Ціна: 100" v-model="itemPrice">
+                    <input type="number" placeholder="Ціна: 1000" v-model="itemPrice">
                 </div>
                 <div class="new-sale-form-item">
                     <button @click="addToCart" class="btn">+ Додати</button>
@@ -43,48 +39,18 @@
                     Сума: <b>{{cartTotal}}</b>
                 </div>
                 <div style="text-align: right;">
-                    <button @click="checkout" class="btn">Оформити покупку</button>
+                    <button @click="checkout" class="btn">Зберігти</button>
                 </div>
             </div>
         </div>
 
         <div>
-            <h3>Продажі за сьогодні ({{ todaySecondHandSales?.length }})</h3>
+            <h3>Список закупівель</h3>
             <table>
                 <thead>
                     <tr>
                         <th style="width: 200px;">Дата, час</th>
-                        <th>Товар</th>
-                        <th>Ціна</th>
-                    </tr>
-                </thead>
-                <tbody v-if="todaySecondHandSales?.length">
-                    <tr v-for="(s, i) in todaySecondHandSales" :key="i">
-                        <td style="width: 300px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
-                        <td class="text-capitalize">{{ s.name }}</td>
-                        <td>{{ s.price?.toFixed(2) }}</td>
-                    </tr>
-                </tbody>
-                <tbody v-else>
-                    <tr>
-                        <td colspan="5">
-                            <div class="no-sales">Сьогодні ще немає продажів. <br> <b>Вдалого дня!</b></div>
-                        </td>
-                    </tr>
-                </tbody>
-          </table>
-        </div>
-         <div class="second-stats-container">
-            <div class="stats total">Каса: <b>{{ productsStats.toFixed(2) }}грн</b></div>
-        </div>
-
-        <div>
-            <h3>Всі Продажі ({{ secondHand?.length }})</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 200px;">Дата, час</th>
-                        <th>Товар</th>
+                        <th>Назва</th>
                         <th>Ціна</th>
                     </tr>
                 </thead>
@@ -98,28 +64,27 @@
                 <tbody v-else>
                     <tr>
                         <td colspan="5">
-                            <div class="no-sales">Сьогодні ще немає продажів. <br> <b>Вдалого дня!</b></div>
+                            <div class="no-sales">Витра нема.</div>
                         </td>
                     </tr>
                 </tbody>
           </table>
         </div>
         <div class="second-stats-container">
-            <div class="stats total">Сума: <b>{{ allProductsStats.toFixed(2) }}грн</b></div>
+            <div class="stats total">Сума: <b>{{ productsStats.toFixed(2) }}грн</b></div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { collection, onSnapshot, serverTimestamp, addDoc, query, orderBy, where } from "firebase/firestore"
+import { collection, onSnapshot, serverTimestamp, addDoc, query, orderBy } from "firebase/firestore"
 import { db } from "@/firebase"
 import { ref, onMounted, computed } from "vue"
 import { useToast } from "vue-toastification"
 
 const toast = useToast()
 const secondHand = ref([])
-const todaySecondHandSales = ref([])
-const secondHandCollection = collection(db, "second")
+const secondCostCollection = collection(db, "secondCost")
 const showSaleForm = ref(false)
 const cart = ref([])
 const itemName = ref('')
@@ -129,29 +94,10 @@ const itemPrice = ref('')
 
 // 🔥 Реактивная подписка вместо getDocs
 onMounted(() => {
-  const qry = query(secondHandCollection, orderBy("date", "desc"))
+  const qry = query(secondCostCollection, orderBy("date", "desc"))
   onSnapshot(qry, snapshot => {
     secondHand.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
   })
-
-    // начало и конец сегодняшнего дня
-  const start = new Date()
-  start.setHours(0, 0, 0, 0)
-
-  const end = new Date()
-  end.setHours(23, 59, 59, 999)
-
-  const q = query(
-    secondHandCollection,
-    where("date", ">=", start),
-    where("date", "<=", end),
-    orderBy("date", "desc")
-  )
-
-  onSnapshot(q, snapshot => {
-    todaySecondHandSales.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
-  })
-
 })
 
 
@@ -164,14 +110,10 @@ const cartTotal = computed(() => {
 })
 
 const productsStats = computed(() => {
-  const totalSell = todaySecondHandSales.value.reduce((sum, p) => sum + (p.price), 0)
-  return totalSell
-})
-
-const allProductsStats = computed(() => {
   const totalSell = secondHand.value.reduce((sum, p) => sum + (p.price), 0)
   return totalSell
 })
+
 
 
 const removeItem = (item) => {
@@ -203,12 +145,10 @@ function addToCart() {
 }
 
 function checkout() {
-    console.log('checkout')
-
     try {
         cart.value.forEach( async (item) => {
          // добавляем продажу
-            await addDoc(collection(db, "second"), {
+            await addDoc(collection(db, "secondCost"), {
                 name: item.name,
                 price: item.price,
                 date: serverTimestamp(),
@@ -217,7 +157,7 @@ function checkout() {
         
         cart.value = []
         showSaleForm.value = false
-        toast.success("🚀 Чудова робота!")
+        toast.success("Додано")
     } catch {
         toast.error('Виникла помилка')
     }
@@ -261,18 +201,5 @@ function checkout() {
 
 .second-stats-container {
     padding: 20px 0;
-}
-
-.second-hand-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 0 15px 0;
-}
-
-.second-hand-header a {
-    text-decoration: none;
-    color: #06402B;
-    font-weight: 600;
 }
 </style>
