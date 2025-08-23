@@ -26,7 +26,7 @@
         <h3>Список товарів ({{ products.length }})</h3>
     
         <div>
-            <input v-model="productSearch" placeholder="Пошук" class="search-product">
+            <input v-model="productSearch" placeholder="Пошук: назва або ціна" class="search-product">
         </div>
     
         <table>
@@ -133,9 +133,16 @@ onMounted(() => {
 })
 
 
-const filteredProducts = computed(() =>
-  products.value.filter(p => p.name?.toLowerCase().includes(productSearch.value?.toLowerCase()))
-)
+const filteredProducts = computed(() => {
+  const search = productSearch.value.toLowerCase().trim()
+
+  return products.value.filter((p) => {
+    const nameMatch = p.name?.toLowerCase().includes(search)
+    const priceMatch = String(p.sellPrice ?? "").toLowerCase().includes(search)
+
+    return nameMatch || priceMatch
+  })
+})
 
 // computed статистика по всем товарам
   const productsStats = computed(() => {

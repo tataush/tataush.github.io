@@ -10,7 +10,7 @@
                 <h3>Новий продаж</h3>
                 <button class="btn btn-red" @click="closeSale">Відмінити</button>
             </div>
-            <input v-model="saleSearch" placeholder="Пошук" class="search-product">
+            <input v-model="saleSearch" placeholder="Пошук: назва або ціна" class="search-product">
             <table v-if="saleSearch">
                     <thead>
                         <tr>
@@ -162,11 +162,16 @@ const loadSales = async () => {
 };
 
 // computed фильтр
-const filteredProducts = computed(() =>
-  products.value.filter((p) =>
-    p.name.toLowerCase().includes(saleSearch.value.toLowerCase())
-  )
-);
+const filteredProducts = computed(() => {
+  const search = saleSearch.value.toLowerCase().trim()
+
+  return products.value.filter((p) => {
+    const nameMatch = p.name?.toLowerCase().includes(search)
+    const priceMatch = String(p.sellPrice ?? "").toLowerCase().includes(search)
+
+    return nameMatch || priceMatch
+  })
+})
 
 // ---------------- ПРОДАЖИ ----------------
 const startSale = () => {
