@@ -79,7 +79,15 @@
         </div>
 
         <div>
-            <h3>Всі Продажі ({{ secondHand?.length }})</h3>
+            <div class="section-header">
+                <h3>Всі Продажі ({{ secondHand?.length }})</h3>
+                <div class="filters">
+                    <div >
+                        <label>Дата</label>
+                        <input type="date" v-model="filterDate" @change="applyFilters"/>
+                    </div>
+                </div>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -124,7 +132,7 @@ const showSaleForm = ref(false)
 const cart = ref([])
 const itemName = ref('')
 const itemPrice = ref('')
-
+const filterDate = ref('')
 
 
 // 🔥 Реактивная подписка вместо getDocs
@@ -153,6 +161,32 @@ onMounted(() => {
   })
 
 })
+
+function applyFilters() {
+    // допустим, у тебя есть дата, например 2025-08-23
+    let qry = query(secondHandCollection, orderBy("date", "desc"))
+    if (filterDate.value) {
+        const selectedDate = new Date(filterDate.value)
+
+        // начало и конец дня
+        const startOfDay = new Date(selectedDate)
+        startOfDay.setHours(0, 0, 0, 0)
+
+        const endOfDay = new Date(selectedDate)
+        endOfDay.setHours(23, 59, 59, 999)
+
+        qry = query(
+            secondHandCollection,
+            where("date", ">=", startOfDay),
+            where("date", "<=", endOfDay),
+            orderBy("date", "desc")
+        )
+    }
+    
+    onSnapshot(qry, snapshot => {
+        secondHand.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    })
+}
 
 
 const cartTotal = computed(() => {

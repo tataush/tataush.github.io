@@ -119,4 +119,14 @@ select {
   text-transform: capitalize;
 }
 
+.section-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters label {
+  display: block;
+  font-size: 14px;
+}
+
 </style>
