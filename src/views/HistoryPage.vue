@@ -51,8 +51,8 @@
                         <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
                         <td class="text-capitalize">{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
-                        <td>{{ s.price }}</td>
-                        <td>{{ s.sum }}</td>
+                        <td>{{ s.price?.toFixed(2) }}</td>
+                        <td>{{ s.sum?.toFixed(2) }}</td>
                     </tr>
                 </tbody>
           </table>
