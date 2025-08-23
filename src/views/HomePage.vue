@@ -246,6 +246,7 @@ const checkout = async () => {
             price: item.product.sellPrice,
             cost: item.product.buyPrice,
             sum: item.qty * item.product.sellPrice,
+            productId: item.product.id,
             date: serverTimestamp(),
         });
     }
