@@ -27,7 +27,15 @@
             </div>
         </div>
         <div>
-            <h3>Всі Продажі ({{ sales.length }})</h3>
+            <div class="section-header">
+                <h3>Всі Продажі ({{ filteredSales.length }})</h3>
+                <div class="filters">
+                    <div >
+                        <label>Дата</label>
+                        <input type="date" v-model="filterDate" @change="applyFilters"/>
+                    </div>
+                </div>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -39,7 +47,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(s, i) in sales" :key="i">
+                    <tr v-for="(s, i) in filteredSales" :key="i">
                         <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
                         <td class="text-capitalize">{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
@@ -55,51 +63,125 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { db } from '@/firebase' // импорт твоей конфигурации firebase.js
-import { collection, getDocs } from "firebase/firestore"
-
+import { collection, getDocs, query, onSnapshot, where, orderBy } from "firebase/firestore"
+const salesCollection = collection(db, "sales")
 const sales = ref([])
+const filterDate = ref('')
+const filteredSales = ref([])
 
 // Загружаем все продажи
 async function loadSales() {
-  const snapshot = await getDocs(collection(db, "sales"))
+  const snapshot = await getDocs(salesCollection)
   sales.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
 }
 
-// Универсальная функция для подсчета статистики
-function calcStats(period) {
-  const now = new Date();
-  let from = null;
 
-  if (period === "today") {
-    from = new Date();
-    from.setHours(0,0,0,0);
-  } else if (period === "week") {
-    from = new Date();
-    from.setDate(now.getDate() - 7);
-  } else if (period === "month") {
-    from = new Date(now.getFullYear(), now.getMonth(), 1);
+function applyFilters() {
+    // допустим, у тебя есть дата, например 2025-08-23
+    let qry = query(salesCollection, orderBy("date", "desc"))
+    if (filterDate.value) {
+        const selectedDate = new Date(filterDate.value)
+
+        // начало и конец дня
+        const startOfDay = new Date(selectedDate)
+        startOfDay.setHours(0, 0, 0, 0)
+
+        const endOfDay = new Date(selectedDate)
+        endOfDay.setHours(23, 59, 59, 999)
+
+        qry = query(
+            salesCollection,
+            where("date", ">=", startOfDay),
+            where("date", "<=", endOfDay),
+            orderBy("date", "desc")
+        )
+    }
+    
+    onSnapshot(qry, snapshot => {
+        filteredSales.value = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }))
+    })
+}
+
+
+// 🔧 Приводим поле date к JS Date из любых форматов (Timestamp, ISO-строка и т.п.)
+function toDate(d) {
+  if (!d) return null
+  if (d instanceof Date) return d
+  if (typeof d?.toDate === 'function') return d.toDate() // Firestore Timestamp
+  if (typeof d === 'string' || typeof d === 'number') return new Date(d)
+  if (typeof d === 'object' && 'seconds' in d) {
+    // сериализованный Timestamp { seconds, nanoseconds }
+    return new Date(d.seconds * 1000 + Math.floor((d.nanoseconds || 0) / 1e6))
+  }
+  return new Date(d)
+}
+
+function startOfDay(date = new Date()) {
+  const d = new Date(date); d.setHours(0,0,0,0); return d
+}
+function endOfDay(date = new Date()) {
+  const d = new Date(date); d.setHours(23,59,59,999); return d
+}
+function addDays(d, days) {
+  const r = new Date(d); r.setDate(r.getDate() + days); return r
+}
+
+// ✅ Универсальная функция подсчёта
+function calcStats(period) {
+  const todayStart = startOfDay()
+  const todayEnd = endOfDay()
+
+  let from = null
+  let to = todayEnd
+
+  switch (period) {
+    case "today":
+      from = todayStart
+      break
+    case "week":
+      // последние 7 дней ВКЛЮЧАЯ сегодня
+      from = addDays(todayStart, -6)
+      break
+    case "month":
+      from = new Date(todayStart.getFullYear(), todayStart.getMonth(), 1)
+      break
+    default:
+      from = null
   }
 
   const filtered = sales.value.filter(s => {
-    const d = new Date(s.date * 1000);
-    return from ? d >= from : true;
-  });
+    const d = toDate(s.date)
+    if (!d || isNaN(d)) return false
+    return (!from || d >= from) && (!to || d <= to)
+  })
 
-  const revenue = filtered.reduce((acc, s) => acc + Number(s.sum), 0);
-  const cost = filtered.reduce((acc, s) => acc + Number(s.cost) * Number(s.qty), 0);
-  const profit = revenue - cost;
+  // revenue: сначала берём s.sum, иначе price*qty; cost: cost*qty
+  const revenue = filtered.reduce(
+    (acc, s) => acc + Number(s.sum ?? (Number(s.price || 0) * Number(s.qty || 1))), 0
+  )
+  const cost = filtered.reduce(
+    (acc, s) => acc + (Number(s.cost || 0) * Number(s.qty || 1)), 0
+  )
+  const profit = revenue - cost
 
-  return { revenue, cost, profit };
+  return {
+    count: filtered.length,
+    revenue,
+    cost,
+    profit,
+  }
 }
 
-// computed свойства для статистики
+// 🧮 computed
 const todayStats = computed(() => calcStats("today"))
-const weekStats = computed(() => calcStats("week"))
+const weekStats  = computed(() => calcStats("week"))
 const monthStats = computed(() => calcStats("month"))
 
 // Загружаем при старте
 onMounted(() => {
   loadSales()
+
+  applyFilters()
 })
 </script>
 
