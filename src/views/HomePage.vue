@@ -167,7 +167,7 @@ const filteredProducts = computed(() => {
 
   return products.value.filter((p) => {
     const nameMatch = p.name?.toLowerCase().includes(search)
-    const priceMatch = String(p.sellPrice ?? "").toLowerCase().includes(search)
+    const priceMatch = String(p.sellPrice ?? "").toLowerCase() === search
 
     return nameMatch || priceMatch
   })
