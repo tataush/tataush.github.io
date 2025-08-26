@@ -28,13 +28,16 @@
         </div>
         <div>
             <div class="section-header">
-                <h3>Всі Продажі ({{ filteredSales.length }})</h3>
+                <h3>Всі Продажі ({{ products.length }})</h3>
                 <div class="filters">
                     <div >
                         <label>Дата</label>
                         <input type="date" v-model="filterDate" @change="applyFilters"/>
                     </div>
                 </div>
+            </div>
+            <div>
+              <input v-model="saleSearch" placeholder="Пошук: назва або ціна" class="search-product">
             </div>
             <table>
                 <thead>
@@ -47,7 +50,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(s, i) in filteredSales" :key="i">
+                    <tr v-for="(s, i) in products" :key="i">
                         <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
                         <td class="text-capitalize">{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
@@ -68,6 +71,20 @@ const salesCollection = collection(db, "sales")
 const sales = ref([])
 const filterDate = ref('')
 const filteredSales = ref([])
+const saleSearch = ref('')
+
+
+const products = computed(() => {
+  const search = saleSearch.value.toLowerCase().trim()
+
+  return filteredSales.value.filter((p) => {
+    const nameMatch = p.name?.toLowerCase().includes(search)
+    const priceMatch = String(p.price ?? "").toLowerCase() === search
+
+    return nameMatch || priceMatch
+  })
+})
+
 
 // Загружаем все продажи
 async function loadSales() {
