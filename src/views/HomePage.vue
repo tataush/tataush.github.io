@@ -77,7 +77,7 @@
         </div>
 
         <div>
-            <h3>Продажі за сьогодні</h3>
+            <h3>Продажі за сьогодні <span v-if="sales?.length">({{ salesCount }}од.)</span></h3>
             <table>
                 <thead>
                     <tr>
@@ -160,6 +160,14 @@ const loadSales = async () => {
   // const querySnapshot = await getDocs(collection(db, "sales"),  where("date", ">=", start), where("date", "<=", end), orderBy("date", "desc"));
   // sales.value = querySnapshot.docs.map((d) => ({ id: d.id, ...d.data() }));
 };
+
+const salesCount = computed(() => {
+  let count = 0
+  sales.value.forEach(s => {
+    count += s.qty
+  })
+  return count
+})
 
 // computed фильтр
 const filteredProducts = computed(() => {

@@ -28,16 +28,13 @@
         </div>
         <div>
             <div class="section-header">
-                <h3>Всі Продажі ({{ products.length }})</h3>
+                <h3>Всі Продажі ({{ filteredSales.length }})</h3>
                 <div class="filters">
                     <div >
                         <label>Дата</label>
                         <input type="date" v-model="filterDate" @change="applyFilters"/>
                     </div>
                 </div>
-            </div>
-            <div>
-              <input v-model="saleSearch" placeholder="Пошук: назва або ціна" class="search-product">
             </div>
             <table>
                 <thead>
@@ -50,7 +47,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(s, i) in products" :key="i">
+                    <tr v-for="(s, i) in filteredSales" :key="i">
                         <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
                         <td class="text-capitalize">{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
@@ -71,20 +68,6 @@ const salesCollection = collection(db, "sales")
 const sales = ref([])
 const filterDate = ref('')
 const filteredSales = ref([])
-const saleSearch = ref('')
-
-
-const products = computed(() => {
-  const search = saleSearch.value.toLowerCase().trim()
-
-  return filteredSales.value.filter((p) => {
-    const nameMatch = p.name?.toLowerCase().includes(search)
-    const priceMatch = String(p.price ?? "").toLowerCase() === search
-
-    return nameMatch || priceMatch
-  })
-})
-
 
 // Загружаем все продажи
 async function loadSales() {
@@ -139,54 +122,64 @@ function startOfDay(date = new Date()) {
 function endOfDay(date = new Date()) {
   const d = new Date(date); d.setHours(23,59,59,999); return d
 }
-function addDays(d, days) {
-  const r = new Date(d); r.setDate(r.getDate() + days); return r
+
+function startOfWeek(date = new Date()) {
+  const d = new Date(date)
+  const day = d.getDay() || 7 // воскресенье = 0 → 7
+  if (day !== 1) d.setDate(d.getDate() - (day - 1)) // понедельник
+  d.setHours(0, 0, 0, 0)
+  return d
+}
+
+function endOfWeek(date = new Date()) {
+  const d = startOfWeek(date)
+  d.setDate(d.getDate() + 6) // воскресенье
+  d.setHours(23, 59, 59, 999)
+  return d
+}
+
+function startOfMonth(date = new Date()) {
+  return new Date(date.getFullYear(), date.getMonth(), 1, 0, 0, 0, 0)
+}
+
+function endOfMonth(date = new Date()) {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59, 999)
 }
 
 // ✅ Универсальная функция подсчёта
 function calcStats(period) {
-  const todayStart = startOfDay()
-  const todayEnd = endOfDay()
-
   let from = null
-  let to = todayEnd
+  let to = null
 
   switch (period) {
     case "today":
-      from = todayStart
+      from = startOfDay()
+      to = endOfDay()
       break
     case "week":
-      // последние 7 дней ВКЛЮЧАЯ сегодня
-      from = addDays(todayStart, -6)
+      from = startOfWeek()
+      to = endOfWeek()
       break
     case "month":
-      from = new Date(todayStart.getFullYear(), todayStart.getMonth(), 1)
+      from = startOfMonth()
+      to = endOfMonth()
       break
     default:
       from = null
+      to = null
   }
 
   const filtered = sales.value.filter(s => {
     const d = toDate(s.date)
-    if (!d || isNaN(d)) return false
+    if (!d) return false
     return (!from || d >= from) && (!to || d <= to)
   })
 
-  // revenue: сначала берём s.sum, иначе price*qty; cost: cost*qty
-  const revenue = filtered.reduce(
-    (acc, s) => acc + Number(s.sum ?? (Number(s.price || 0) * Number(s.qty || 1))), 0
-  )
-  const cost = filtered.reduce(
-    (acc, s) => acc + (Number(s.cost || 0) * Number(s.qty || 1)), 0
-  )
+  const revenue = filtered.reduce((acc, s) => acc + Number(s.sum ?? s.price * s.qty), 0)
+  const cost = filtered.reduce((acc, s) => acc + Number(s.cost ?? 0) * Number(s.qty ?? 1), 0)
   const profit = revenue - cost
 
-  return {
-    count: filtered.length,
-    revenue,
-    cost,
-    profit,
-  }
+  return { revenue, cost, profit, count: filtered.length }
 }
 
 // 🧮 computed
