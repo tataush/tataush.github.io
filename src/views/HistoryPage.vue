@@ -8,21 +8,21 @@
                     <h4>Сьогодні</h4>
                     <div class="stats total">Каса: <b>{{ todayStats.revenue?.toFixed(2) }}грн</b></div>
                     <div class="stats default-blur">Собівартість: <b>{{ todayStats.cost?.toFixed(2) }}грн</b></div>
-                    <div class="stats default-blur">Приботок: <b>{{ todayStats.profit?.toFixed(2) }}грн</b></div>
+                    <div class="stats default-blur">Прибуток: <b>{{ todayStats.profit?.toFixed(2) }}грн</b></div>
                 </div>
 
                 <div>
                     <h4>Тиждень</h4>
                     <div class="stats">Каса: <b>{{ weekStats.revenue?.toFixed(2) }}</b></div>
                     <div class="stats default-blur">Собівартість: <b>{{ weekStats.cost?.toFixed(2) }}</b></div>
-                    <div class="stats default-blur">Приботок: <b>{{ weekStats.profit?.toFixed(2) }}</b></div>
+                    <div class="stats default-blur">Прибуток: <b>{{ weekStats.profit?.toFixed(2) }}</b></div>
                 </div>
 
                 <div>
                     <h4>Місяць</h4>
                     <div class="stats">Каса: <b>{{ monthStats.revenue?.toFixed(2) }}</b></div>
                     <div class="stats default-blur">Собівартість: <b>{{ monthStats.cost?.toFixed(2) }}</b></div>
-                    <div class="stats default-blur">Приботок: <b>{{ monthStats.profit?.toFixed(2) }}</b></div>
+                    <div class="stats default-blur">Прибуток: <b>{{ monthStats.profit?.toFixed(2) }}</b></div>
                 </div>
             </div>
         </div>
