@@ -9,6 +9,7 @@
             <router-link to="/products">Товари</router-link>
             <router-link to="/history">Історія продаж</router-link>
             <router-link to="/write-offs">Списання</router-link>
+            <router-link to="/debts">Борги</router-link>
             <router-link to="/second"><b>Second Hand</b></router-link>
         </div>
     </div>

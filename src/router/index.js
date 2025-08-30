@@ -5,6 +5,7 @@ import Products from '../views/ProductsPage.vue'
 import WriteOffs from '../views/WriteOffs.vue'
 import SecondHand from '@/views/SecondHandPage.vue'
 import SecondHandCost from '@/views/SecondHandСost.vue'
+import DebtsPage from '@/views/DebtsPage.vue'
 const routes = [
   {
     path: '/',
@@ -35,6 +36,11 @@ const routes = [
     path: '/second/cost',
     name: 'SecondHandCost',
     component: SecondHandCost,
+  },
+  {
+    path: '/debts',
+    name: 'DebtsPage',
+    component: DebtsPage,
   },
 ]
 

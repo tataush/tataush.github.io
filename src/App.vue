@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <HeaderComponent></HeaderComponent>
+    <HeaderComponent />
     <div class="page-body">
       <router-view />
     </div>
