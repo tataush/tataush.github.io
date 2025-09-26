@@ -86,6 +86,7 @@
                         <th>Кіл-ть</th>
                         <th>Ціна</th>
                         <th>Сума</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody v-if="sales?.length">
@@ -95,6 +96,7 @@
                         <td>{{ s.qty }}</td>
                         <td>{{ s.price?.toFixed(2) }}</td>
                         <td>{{ s.sum?.toFixed(2)}}</td>
+                        <td style="text-align: right;"><button @click="deleteSale(s)" class="btn">❌</button></td>
                     </tr>
                 </tbody>
                 <tbody v-else>
@@ -129,7 +131,9 @@ import {
   where,
   orderBy,
   onSnapshot,
-  query
+  query,
+  getDoc,
+  deleteDoc
 } from "firebase/firestore";
 
 import { useToast } from "vue-toastification"
@@ -301,6 +305,51 @@ function calcStats(period) {
 }
 
 const todayStats = computed(() => calcStats("today"));
+
+const deleteSale = (s) => {
+  const ok = confirm("Відмінити продаж? 🤔")
+  if (!ok) return 
+  returnProduct(s)
+}
+
+
+async function getProductById(id) {
+  try {
+    const ref = doc(db, "products", id) // "products" — твоя коллекция
+    const snap = await getDoc(ref)
+
+    if (snap.exists()) {
+      return { id: snap.id, ...snap.data() }
+    } else {
+      console.log("Документ не найден")
+      return null
+    }
+  } catch (e) {
+    console.error("Ошибка при получении:", e)
+    return null
+  }
+}
+
+
+async function returnProduct(item) {
+  try {
+    const saleRef = doc(db, "sales", item.id) 
+    const productRef = doc(db, "products", item.productId);
+    const product = await getProductById(item.productId);
+    if (product) {
+      await deleteDoc(saleRef)
+      await updateDoc(productRef, {
+        qty: product.qty += 1,
+      });
+      toast.success("Продаж відмінено")
+    } else {
+       toast.error("Виникла помилка")
+    }
+  } catch (e) {
+     toast.error("Виникла помилка")
+    console.error("Ошибка при удалении:", e)
+  }
+}
 
 // ---------------- INIT ----------------
 onMounted(async () => {
