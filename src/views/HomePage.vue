@@ -91,7 +91,7 @@
                 </thead>
                 <tbody v-if="sales?.length">
                     <tr v-for="(s, i) in sales" :key="i">
-                        <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
+                        <td style="width: 200px;">{{ new Date(s.date.seconds * 1000).toLocaleString() }}</td>
                         <td class="text-capitalize">{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
                         <td>{{ s.price?.toFixed(2) }}</td>

@@ -97,7 +97,7 @@
                 </thead>
                 <tbody v-if="currentDebts?.length">
                     <tr v-for="(s, i) in currentDebts" :key="i">
-                        <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
+                        <td style="width: 200px;">{{ new Date(s.date.seconds * 1000).toLocaleString() }}</td>
                         <td class="text-capitalize" style="width: 200px;">{{ s.cusromer }}</td>
                         <td class="text-capitalize">{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
@@ -140,7 +140,7 @@
                 </thead>
                 <tbody v-if="debtsHistory?.length">
                     <tr v-for="(s, i) in debtsHistory" :key="i">
-                        <td style="width: 200px;">{{ new Date(s.date * 1000).toLocaleString() }}</td>
+                        <td style="width: 200px;">{{ new Date(s.date.seconds * 1000).toLocaleString() }}</td>
                         <td class="text-capitalize" style="width: 200px;">{{ s.cusromer }}</td>
                         <td class="text-capitalize">{{ s.name }}</td>
                         <td>{{ s.qty }}</td>
