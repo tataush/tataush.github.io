@@ -101,7 +101,7 @@
                 </tbody>
                 <tbody v-else>
                     <tr>
-                        <td colspan="5">
+                        <td colspan="6">
                             <div class="no-sales">Сьогодні ще немає продажів. <br> <b>Вдалого дня!</b></div>
                         </td>
                     </tr>
@@ -180,8 +180,8 @@ const filteredProducts = computed(() => {
   return products.value.filter((p) => {
     const nameMatch = p.name?.toLowerCase().includes(search)
     const priceMatch = String(p.sellPrice ?? "").toLowerCase() === search
-
-    return nameMatch || priceMatch
+    const qty = p.qty
+    return (nameMatch || priceMatch) && qty
   })
 })
 

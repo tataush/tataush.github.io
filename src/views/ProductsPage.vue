@@ -25,8 +25,11 @@
 
         <h3>Список товарів ({{ products.length }})</h3>
     
-        <div>
+        <div style="display: flex; justify-content: space-between;">
             <input v-model="productSearch" placeholder="Пошук: назва або ціна" class="search-product">
+            <button @click="showZeroProducts = !showZeroProducts" class="btn">
+              {{ showZeroProducts ? "Сховати нульові" : "Показати всі" }}
+            </button>
         </div>
     
         <table>
@@ -59,6 +62,7 @@
                     <button v-if="editingId !== p.id" @click="startEdit(p)" class="btn">✏️</button>
                     <button v-else @click="saveEdit" class="btn">💾</button>
                     <button @click="openWriteOff(p)" class="btn">✂️</button>
+                    <button @click="deleteProduct(p)" class="btn">🗑️</button>
                   </div>
                 </td>
             </tr>
@@ -124,6 +128,7 @@ const writeOffsCollection = collection(db, "writeOffs")
 const writeOffQty = ref(1)
 const selectedProduct = reactive({ name: "", qty: 0, buyPrice: 0, sellPrice: 0 })
 const writeOffReason = ref('')
+const showZeroProducts = ref(false)
 
 // 🔥 Реактивная подписка вместо getDocs
 onMounted(() => {
@@ -136,12 +141,13 @@ onMounted(() => {
 const filteredProducts = computed(() => {
   const search = productSearch.value.toLowerCase().trim()
 
-  return products.value.filter((p) => {
-    const nameMatch = p.name?.toLowerCase().includes(search)
-    const priceMatch = String(p.sellPrice ?? "").toLowerCase() === search
-
-    return nameMatch || priceMatch
-  })
+  return products.value
+    .filter(p => showZeroProducts.value || p.qty > 0)
+    .filter(p => {
+      const nameMatch = p.name?.toLowerCase().includes(search)
+      const priceMatch = String(p.sellPrice ?? "") === search
+      return nameMatch || priceMatch
+    })
 })
 
 // computed статистика по всем товарам
@@ -207,6 +213,23 @@ const saveEdit = async () => {
     toast.success("🚀 Товар змінено успешно!")
   } catch (e) {
     toast.error("Виникла помилка")
+  }
+}
+
+const deleteProduct = async (product) => {
+  if (!confirm(`Видалити товар "${product.name}" ?`)) return
+
+  try {
+    const productRef = doc(db, "products", product.id)
+
+    await updateDoc(productRef, {
+      qty: 0
+    })
+
+    toast.success("🗑️ Товар видалено")
+  } catch (e) {
+    console.error(e)
+    toast.error("Помилка при видаленні")
   }
 }
 
